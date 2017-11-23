@@ -8,6 +8,8 @@ package ChatSample;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,6 +19,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -152,64 +155,57 @@ public class fServer extends javax.swing.JFrame {
     
     
     class ClientHandler implements Runnable{
-    BufferedReader reader; 
-    PrintWriter writer;
-    public boolean status = true;
-    public Socket socket;
-    private ArrayList<Socket> socks;
-    private ArrayList<PrintWriter> writers;
+    ObjectInputStream reader; 
+    ObjectOutputStream writer;
+    public boolean isActive = true;
+    public int id;
     
-    public ClientHandler(Socket socket){
-      this.socket  = socket;
-      writers = new ArrayList<>();
-    }
-    private void UpdateWriter( ArrayList<Socket> socks){
-        this.socks = socks;
-        try {
-        writers = new ArrayList<>();
-            for(Socket sock : socks){
 
-                    writers.add(new PrintWriter(sock.getOutputStream()));
-
-            }
-        
-         } catch (IOException ex) {
-                Logger.getLogger(fServer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
+    public ClientHandler(Socket socket,ObjectOutputStream out,ObjectInputStream in){
+      this.writer = out;
+      this.reader = in;
     }
+   
     @Override
     public void run() {
-           try {
-            String message;
-            writer = new PrintWriter(socket.getOutputStream());
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            while( (message = reader.readLine() ) != null){
-                System.out.println(message);
-               for(PrintWriter write : writers){
-                    write.println(message);
-                    write.flush();
-               }
-                tServer.append(message + "\n");
-                
-            }
-               System.out.println("error input");
+           
+        try {
+                while( true){
+
+                    System.out.println("server is watting");
+                    ClientObject client =(ClientObject)reader.readObject();
+                    for(ObjectOutputStream write : OutputHandler.GetOOS()){
+                        write.writeObject(new ClientObject(client.message, client.name, true));
+                    }
+
+                    tServer.append(client.message + "\n");
+
+                }
         } catch (IOException ex) {
-            System.out.println("Can't create thread for client " + ex.getMessage());
-            status = false;
+             System.out.println("Can't create thread for client " + ex.getMessage());
+              OutputHandler.Remove(writer);
+           
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(fServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        
+              
+                  
+              
+         
         
     }
     
 }
     
     public class Server implements Runnable{
-    int port;
-    boolean isRunning = false;
-    ServerSocket server;
-    ThreadPoolExecutor execute;
-    private ArrayList<ClientHandler> handlers = new ArrayList<>();
-    private ArrayList<Socket> socks = new ArrayList<>();
+    private int port;
+    private boolean isRunning = true;
+    private ServerSocket server;
+    private ThreadPoolExecutor execute;
+            
+            
     public Server(int port){
         this.port = port;
     }
@@ -224,24 +220,22 @@ public class fServer extends javax.swing.JFrame {
                 System.out.println("Server's starting");
                 // create thread for handle new client connect to server
                 Socket sock = server.accept();
-                socks.add(sock);
-               ClientHandler handler = new ClientHandler(sock);
-                handlers.add(handler);
-                //remove user not connect
-                for(ClientHandler hand : handlers){
-                    if(!hand.status) handlers.remove(hand);
-                    else{
-                      hand.UpdateWriter(socks);
-                    }
-                }
-                
-                
-                if(CountActive() <= 3 )
-                execute.execute(handler);
-                else{
+                if(CountActive() > 1 ){
                     System.out.println("phong da day");
-//                    sock.getOutputStream().write(2);
+                    sock.getOutputStream().write(1);
+//                    JOptionPane.showMessageDialog(null, "phong da day");
                 }
+                else{
+                    sock.getOutputStream().write(0);
+                    ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
+                    OutputHandler.Add(out);
+                    ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
+                    ClientHandler handler = new ClientHandler(sock,out,in);
+                    
+                    execute.execute(handler);
+                    
+                }
+                
             }
             
         } catch (IOException ex) {
@@ -266,7 +260,18 @@ public class fServer extends javax.swing.JFrame {
        StartServer();
     }
 }
-    
+  public static class OutputHandler{
+     private static ArrayList<ObjectOutputStream> oos = new ArrayList<>();
+     public static ArrayList<ObjectOutputStream> GetOOS(){
+         return oos;
+     }
+     public static void Remove(ObjectOutputStream os){
+         oos.remove(os);
+     }
+      public static void Add(ObjectOutputStream os){
+         oos.add(os);
+     }
+  }  
     
     
     

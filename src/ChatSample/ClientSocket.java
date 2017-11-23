@@ -5,15 +5,18 @@
  */
 package ChatSample;
 
+import java.net.Socket;
+
 /**
  *
  * @author HK
  */
-interface IClient {
+public class ClientSocket extends Socket {
     
-    void SendMessage(String message,boolean isReady);
-    void UpdateChat(String message);
-//    boolean Connect(String address, int port);
-    boolean Disconnect();
+    public String UserName;
+    
+    
+    
+    
     
 }

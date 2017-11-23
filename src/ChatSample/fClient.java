@@ -7,9 +7,15 @@ package ChatSample;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,10 +24,10 @@ import java.net.Socket;
 public class fClient extends javax.swing.JFrame {
 
     Client client;
-    public fClient() {
+    public fClient(String userName,int port) {
         initComponents();
-        //TODO enter user name here
-        
+         client = new Client(userName,"localhost",port);
+        (new Thread(client)).start();
         
     }
 
@@ -46,19 +52,33 @@ public class fClient extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        lUser2 = new javax.swing.JLabel();
+        lUser1 = new javax.swing.JLabel();
+        lUser3 = new javax.swing.JLabel();
+        lUser4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        jButton1.setText("Connect");
+        jButton1.setText("Sẵn sàng");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Client_Connect(evt);
             }
         });
 
-        jButton2.setText("End");
+        jButton2.setText("Thoát");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Send");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -84,28 +104,61 @@ public class fClient extends javax.swing.JFrame {
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
 
+        lUser2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lUser2.setForeground(new java.awt.Color(255, 51, 102));
+        lUser2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lUser2.setText("Sẵn sàng");
+        lUser2.setEnabled(false);
+
+        lUser1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lUser1.setForeground(new java.awt.Color(255, 51, 102));
+        lUser1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lUser1.setText("Sẵn sàng");
+        lUser1.setEnabled(false);
+
+        lUser3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lUser3.setForeground(new java.awt.Color(255, 51, 102));
+        lUser3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lUser3.setText("Sẵn sàng");
+        lUser3.setEnabled(false);
+
+        lUser4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lUser4.setForeground(new java.awt.Color(255, 51, 102));
+        lUser4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lUser4.setText("Sẵn sàng");
+        lUser4.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(275, 275, 275))
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(32, 32, 32))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(90, Short.MAX_VALUE)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(78, 78, 78)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lUser3, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(78, 78, 78)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(91, 91, 91))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lUser2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lUser4, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                     .addContainerGap(290, Short.MAX_VALUE)
@@ -115,11 +168,18 @@ public class fClient extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(164, Short.MAX_VALUE)
+                .addComponent(lUser3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lUser2)
+                    .addComponent(lUser4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
-                .addGap(65, 65, 65)
+                .addGap(45, 45, 45)
+                .addComponent(lUser1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -133,6 +193,8 @@ public class fClient extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addContainerGap(373, Short.MAX_VALUE)))
         );
+
+        lUser1.getAccessibleContext().setAccessibleName("lUser1");
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -176,19 +238,47 @@ public class fClient extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void Client_Connect(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Client_Connect
-     client = new Client("Minh","localhost",9999);
-        (new Thread(client)).start();
-        
+    
+        if(lUser1.isEnabled())
+            lUser1.enableInputMethods(false);
+        else
+            lUser1.enableInputMethods(true);
         
     }//GEN-LAST:event_Client_Connect
 
     private void Send(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Send
        
+        
+        
+        
         if(!tClient.getText().isEmpty()){
-            client.SendMessage(tClient.getText());
+            client.SendMessage(tClient.getText(),true);
         }
         
     }//GEN-LAST:event_Send
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        try {
+            client.socket.close();
+            this.dispose();
+        } catch (IOException ex) {
+            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        
+          try {
+            client.socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -220,7 +310,7 @@ public class fClient extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new fClient().setVisible(true);
+                new fClient("minh",9999).setVisible(true);
             }
         });
     }
@@ -229,12 +319,12 @@ public class fClient extends javax.swing.JFrame {
     
     public class Client implements IClient,Runnable {
     
-    BufferedReader reader ;
-    PrintWriter writer;
-    Socket socket;
-    String name,address;
-    int port;
-    
+    private ObjectInputStream reader ;
+    private ObjectOutputStream writer;
+    private Socket socket;
+    private String name,address;
+    private int port;
+    public boolean isActive = true;
     public Client(String name,String address, int port){
         this.name = name;
         this.address = address;
@@ -243,15 +333,18 @@ public class fClient extends javax.swing.JFrame {
     }
     
     @Override
-    public void SendMessage(String message) {
+    public void SendMessage(String message,boolean isReady) {
        
-         writer.println(message);
-         writer.flush();
+        try {
+            writer.writeObject(new ClientObject(message, name, isReady));
+        } catch (IOException ex) {
+            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     @Override
     public void UpdateChat(String message) {
-        jTextArea1.append(name +" : " + message + "\n");
+        jTextArea1.append( message + "\n");
     }
     
     @Override
@@ -263,20 +356,33 @@ public class fClient extends javax.swing.JFrame {
         public void run() {
              try {
             socket = new Socket(address, port);
+                 InputStream is = socket.getInputStream();
+            if(is.read() == 1){
+                JOptionPane.showMessageDialog( null,"phong da day");
+                return;
+            }
             // to read from server
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            reader = new ObjectInputStream(socket.getInputStream());
             // to write to server
-            writer = new PrintWriter(socket.getOutputStream());
+            writer = new ObjectOutputStream(socket.getOutputStream());
+            writer.writeObject(new ClientObject(name + " is connected", name, true));
             
-            writer.println(name + " is connected");
-            
-            writer.flush();
+//            writer.flush();
             String mess;
-            while((mess = reader.readLine()) != null){
+            while(true){
+                if(!isActive){
+                    SendMessage("end", false);
+                    break;
+                }
+                System.out.println("client is watting");
+                ClientObject temp = (ClientObject)reader.readObject();
+                mess = temp.name + " : " + temp.message;
                 UpdateChat(mess);
             }
         } catch (IOException ex) {
             System.out.println("Can't connect "+ ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -298,6 +404,10 @@ public class fClient extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel lUser1;
+    private javax.swing.JLabel lUser2;
+    private javax.swing.JLabel lUser3;
+    private javax.swing.JLabel lUser4;
     private javax.swing.JTextField tClient;
     // End of variables declaration//GEN-END:variables
 }
