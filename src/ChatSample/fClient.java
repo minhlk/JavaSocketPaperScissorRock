@@ -13,8 +13,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,11 +27,15 @@ import javax.swing.JOptionPane;
 public class fClient extends javax.swing.JFrame {
 
     Client client;
-    public fClient(String userName,int port) {
+    JLabel[] labels = new JLabel[3];
+    public fClient(int id,String userName,int port) {
         initComponents();
-         client = new Client(userName,"localhost",port);
+         client = new Client(id,userName,"localhost",port);
         (new Thread(client)).start();
-        
+//        labels[0] = lUser1;
+        labels[0] = lUser2;
+        labels[1] = lUser3;
+        labels[2] = lUser4;
     }
 
     /**
@@ -69,7 +76,7 @@ public class fClient extends javax.swing.JFrame {
         jButton1.setText("Sẵn sàng");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Client_Connect(evt);
+                Client_Ready(evt);
             }
         });
 
@@ -237,14 +244,17 @@ public class fClient extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void Client_Connect(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Client_Connect
+    private void Client_Ready(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Client_Ready
     
-        if(lUser1.isEnabled())
-            lUser1.enableInputMethods(false);
-        else
-            lUser1.enableInputMethods(true);
-        
-    }//GEN-LAST:event_Client_Connect
+        if(lUser1.isEnabled()){
+            lUser1.setEnabled(false);
+            client.Ready(false);
+        }
+        else{
+            lUser1.setEnabled(true);
+            client.Ready(true);
+        }
+    }//GEN-LAST:event_Client_Ready
 
     private void Send(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Send
        
@@ -259,6 +269,7 @@ public class fClient extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
+        client.SendMessage(client.name + " đã thoát khỏi phòng",true);
         try {
             client.socket.close();
             this.dispose();
@@ -272,6 +283,7 @@ public class fClient extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         
+        client.SendMessage(client.name + " đã thoát khỏi phòng",true);
           try {
             client.socket.close();
         } catch (IOException ex) {
@@ -310,44 +322,57 @@ public class fClient extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new fClient("minh",9999).setVisible(true);
+                new fClient(1,"minh",9999).setVisible(true);
             }
         });
     }
 
     
     
-    public class Client implements IClient,Runnable {
+    public class Client implements Runnable {
     
     private ObjectInputStream reader ;
     private ObjectOutputStream writer;
     private Socket socket;
     private String name,address;
+    private int id;
     private int port;
     public boolean isActive = true;
-    public Client(String name,String address, int port){
+    public boolean isReady;
+    ClientObject[] users ;
+    
+    public Client(int id, String name,String address, int port){
+        this.id = id;
         this.name = name;
         this.address = address;
         this.port = port;
                
     }
     
-    @Override
-    public void SendMessage(String message,boolean isReady) {
+//    @Override
+    public void SendMessage( String message,boolean isReady) {
        
         try {
-            writer.writeObject(new ClientObject(message, name, isReady));
+            writer.writeObject(new ClientObject(id ,message, name, isReady));
         } catch (IOException ex) {
             Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
-    @Override
-    public void UpdateChat(String message) {
+//    @Override
+    public void ReceiveMessage(String message) {
         jTextArea1.append( message + "\n");
     }
     
-    @Override
+    public void Ready(boolean isReady){
+
+        SendMessage("", isReady);
+        
+    }
+    
+    
+    
+//    @Override
     public boolean Disconnect() {
         return true;
     }
@@ -358,26 +383,45 @@ public class fClient extends javax.swing.JFrame {
             socket = new Socket(address, port);
                  InputStream is = socket.getInputStream();
             if(is.read() == 1){
-                JOptionPane.showMessageDialog( null,"phong da day");
+                JOptionPane.showMessageDialog( null,"phòng đầy ");
                 return;
             }
             // to read from server
             reader = new ObjectInputStream(socket.getInputStream());
             // to write to server
             writer = new ObjectOutputStream(socket.getOutputStream());
-            writer.writeObject(new ClientObject(name + " is connected", name, true));
+            writer.writeObject(new ClientObject(id,"", name, isReady));
+            writer.writeObject(new ClientObject(id,name + " vừa vào phòng", name, isReady));
             
 //            writer.flush();
             String mess;
             while(true){
-                if(!isActive){
-                    SendMessage("end", false);
-                    break;
-                }
                 System.out.println("client is watting");
-                ClientObject temp = (ClientObject)reader.readObject();
-                mess = temp.name + " : " + temp.message;
-                UpdateChat(mess);
+                Object object = reader.readUnshared();
+                
+                if(object instanceof ClientObject){
+                    ClientObject user = (ClientObject)object;
+                    if(user.message.isEmpty() &&  user.isReady){
+//                        System.out.println("fk");
+                    }
+                    else{
+                    mess = user.name + " : " + user.message;
+                    ReceiveMessage(mess);
+                    }
+                }
+                else if(object instanceof ClientObject[]){
+                    ClientObject[] usersz = (ClientObject[])object;
+                    users =(ClientObject[])object;
+                    int i = 0;
+                   for(ClientObject user : users){
+                       if(user == null) continue;
+                       if(user.id != id){
+                           labels[i].setEnabled(user.isReady);
+                           i++;
+                           System.out.println("fuck " + i);
+                       }
+                   }
+                }
             }
         } catch (IOException ex) {
             System.out.println("Can't connect "+ ex.getMessage());

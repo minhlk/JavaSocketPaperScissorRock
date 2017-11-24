@@ -119,7 +119,7 @@ public class fLogin extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         
-        (new fClient(jTextField1.getText().trim(),9999)).setVisible(true);
+        (new fClient(Integer.parseInt(jTextField2.getText().trim()),jTextField1.getText().trim(),9999)).setVisible(true);
         this.setVisible(false);
         
     }//GEN-LAST:event_jButton1ActionPerformed

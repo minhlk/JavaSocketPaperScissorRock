@@ -69,7 +69,7 @@
         <Property name="text" type="java.lang.String" value="S&#x1eb5;n s&#xe0;ng"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Client_Connect"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Client_Ready"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButton2">

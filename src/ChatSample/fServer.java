@@ -14,6 +14,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -154,7 +156,7 @@ public class fServer extends javax.swing.JFrame {
     
     
     
-    class ClientHandler implements Runnable{
+    public class ClientHandler implements Runnable{
     ObjectInputStream reader; 
     ObjectOutputStream writer;
     public boolean isActive = true;
@@ -174,8 +176,21 @@ public class fServer extends javax.swing.JFrame {
 
                     System.out.println("server is watting");
                     ClientObject client =(ClientObject)reader.readObject();
-                    for(ObjectOutputStream write : OutputHandler.GetOOS()){
-                        write.writeObject(new ClientObject(client.message, client.name, true));
+                    if(client.message.isEmpty() ){
+                        if(!ServerHandler.Contain(client.id, client.isReady))
+                            ServerHandler.users.add(client);
+                            //update new users
+//                            writer.reset();
+                             for(ObjectOutputStream write : ServerHandler.GetOOS()){
+                                write.writeUnshared(ServerHandler.users.toArray(new ClientObject[4]));
+                                write.reset();
+                             }
+                            continue;
+                        }
+                      
+                    
+                    for(ObjectOutputStream write : ServerHandler.GetOOS()){
+                        write.writeObject(new ClientObject(client.id ,client.message, client.name, client.isReady));
                     }
 
                     tServer.append(client.message + "\n");
@@ -183,7 +198,9 @@ public class fServer extends javax.swing.JFrame {
                 }
         } catch (IOException ex) {
              System.out.println("Can't create thread for client " + ex.getMessage());
-              OutputHandler.Remove(writer);
+             //remove from users ???????
+             //????
+              ServerHandler.Remove(writer);
            
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(fServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -220,7 +237,7 @@ public class fServer extends javax.swing.JFrame {
                 System.out.println("Server's starting");
                 // create thread for handle new client connect to server
                 Socket sock = server.accept();
-                if(CountActive() > 1 ){
+                if(CountActive() > 2 ){
                     System.out.println("phong da day");
                     sock.getOutputStream().write(1);
 //                    JOptionPane.showMessageDialog(null, "phong da day");
@@ -228,7 +245,7 @@ public class fServer extends javax.swing.JFrame {
                 else{
                     sock.getOutputStream().write(0);
                     ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
-                    OutputHandler.Add(out);
+                    ServerHandler.Add(out);
                     ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
                     ClientHandler handler = new ClientHandler(sock,out,in);
                     
@@ -260,10 +277,12 @@ public class fServer extends javax.swing.JFrame {
        StartServer();
     }
 }
-  public static class OutputHandler{
+    public static class ServerHandler{
      private static ArrayList<ObjectOutputStream> oos = new ArrayList<>();
+     public static ArrayList<ClientObject> users = new ArrayList<>();
      public static ArrayList<ObjectOutputStream> GetOOS(){
          return oos;
+         
      }
      public static void Remove(ObjectOutputStream os){
          oos.remove(os);
@@ -271,6 +290,23 @@ public class fServer extends javax.swing.JFrame {
       public static void Add(ObjectOutputStream os){
          oos.add(os);
      }
+      public static boolean Contain(int id,boolean isReady){
+          for(int i = 0 ; i < users.size() ; i++){
+              if(users.get(i).id == id){
+                  ClientObject user = users.get(i);
+                  user.isReady = isReady;
+                  users.set(i, user);
+                  return true;
+              }
+          }
+//           for(ClientObject i : users){
+//            if(i.id == id){
+//                i.isReady = isReady;
+//                return true;
+//            }
+//        }
+           return false;
+      }
   }  
     
     
