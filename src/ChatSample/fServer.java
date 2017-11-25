@@ -160,7 +160,7 @@ public class fServer extends javax.swing.JFrame {
     ObjectInputStream reader; 
     ObjectOutputStream writer;
     public boolean isActive = true;
-    public int id;
+    public int id = 0;
     
 
     public ClientHandler(Socket socket,ObjectOutputStream out,ObjectInputStream in){
@@ -177,12 +177,14 @@ public class fServer extends javax.swing.JFrame {
                     System.out.println("server is watting");
                     ClientObject client =(ClientObject)reader.readObject();
                     if(client.message.isEmpty() ){
-                        if(!ServerHandler.Contain(client.id, client.isReady))
+                        if(!ServerHandler.Contain(client.id, client.isReady)){
+                            id = client.id;
                             ServerHandler.users.add(client);
+                        }
                             //update new users
 //                            writer.reset();
                              for(ObjectOutputStream write : ServerHandler.GetOOS()){
-                                write.writeUnshared(ServerHandler.users.toArray(new ClientObject[4]));
+                                write.writeObject(ServerHandler.users.toArray(new ClientObject[4]));
                                 write.reset();
                              }
                             continue;
@@ -200,6 +202,17 @@ public class fServer extends javax.swing.JFrame {
              System.out.println("Can't create thread for client " + ex.getMessage());
              //remove from users ???????
              //????
+             ServerHandler.RemoveUser(id);
+             for(ObjectOutputStream write : ServerHandler.GetOOS()){
+                 try {
+                     write.writeObject(ServerHandler.users.toArray(new ClientObject[4]));
+                     write.reset();
+                 } catch (IOException ex1) {
+                     System.out.println("client disconnected " + ex.getMessage());
+                 }
+                
+                
+             }
               ServerHandler.Remove(writer);
            
         } catch (ClassNotFoundException ex) {
@@ -299,16 +312,16 @@ public class fServer extends javax.swing.JFrame {
                   return true;
               }
           }
-//           for(ClientObject i : users){
-//            if(i.id == id){
-//                i.isReady = isReady;
-//                return true;
-//            }
-//        }
            return false;
       }
-  }  
-    
+       public static void RemoveUser(int id){
+          for(int i = 0 ; i < users.size() ; i++){
+              if(users.get(i).id == id){
+                 users.remove(i);
+              }
+     }
+    }  
+    }
     
     
     

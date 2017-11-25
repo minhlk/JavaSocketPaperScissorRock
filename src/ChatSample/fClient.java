@@ -5,37 +5,43 @@
  */
 package ChatSample;
 
-import java.io.BufferedReader;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 /**
  *
  * @author HK
  */
 public class fClient extends javax.swing.JFrame {
-
+    Timer timer;
     Client client;
     JLabel[] labels = new JLabel[3];
-    public fClient(int id,String userName,int port) {
+    JLabel[] userNames = new JLabel[3];
+    byte choose = 1;
+    public fClient(int id,String userName,int port,int amount) {
         initComponents();
-         client = new Client(id,userName,"localhost",port);
+         client = new Client(id,userName,"localhost",port,amount);
         (new Thread(client)).start();
-//        labels[0] = lUser1;
+        
         labels[0] = lUser2;
         labels[1] = lUser3;
         labels[2] = lUser4;
+        LUserName1.setText(userName);
+        userNames[0] = LUserName2;
+        userNames[1] = LUserName3;
+        userNames[2] = LUserName4;
+        
+       LAmount.setText(amount+" Coin");
     }
 
     /**
@@ -63,10 +69,17 @@ public class fClient extends javax.swing.JFrame {
         lUser1 = new javax.swing.JLabel();
         lUser3 = new javax.swing.JLabel();
         lUser4 = new javax.swing.JLabel();
+        LUserName1 = new javax.swing.JLabel();
+        LUserName2 = new javax.swing.JLabel();
+        LUserName3 = new javax.swing.JLabel();
+        LUserName4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        LAmount = new javax.swing.JLabel();
+        LTimer = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -96,12 +109,27 @@ public class fClient extends javax.swing.JFrame {
 
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Layer 2.png"))); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                scissor_choose(evt);
+            }
+        });
 
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Layer 3.png"))); // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rock_choose(evt);
+            }
+        });
 
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Layer 4.png"))); // NOI18N
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                paper_choose(evt);
+            }
+        });
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
 
@@ -135,70 +163,125 @@ public class fClient extends javax.swing.JFrame {
         lUser4.setText("Sẵn sàng");
         lUser4.setEnabled(false);
 
+        LUserName1.setText("UserName");
+
+        jLabel5.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel5.setText("Số tiền hiện có : ");
+
+        LAmount.setText("0");
+
+        LTimer.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        LTimer.setForeground(new java.awt.Color(255, 51, 51));
+        LTimer.setText("Đang chờ người chơi");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(275, 275, 275))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(32, 32, 32))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(90, Short.MAX_VALUE)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lUser3, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(78, 78, 78)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(91, 91, 91))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lUser2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lUser4, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(290, Short.MAX_VALUE)
-                    .addComponent(jLabel4)
-                    .addGap(270, 270, 270)))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(LAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(110, 110, 110)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lUser3, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(14, 14, 14))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(311, 311, 311)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(LUserName1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel4))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(330, 330, 330)
+                        .addComponent(LUserName3, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(281, 281, 281)
+                                .addComponent(lUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(LTimer)
+                                .addGap(121, 121, 121)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lUser4, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(jLabel1)
+                                .addGap(35, 35, 35))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(43, 43, 43)
+                                .addComponent(LUserName4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(52, 52, 52)))))
+                .addGap(102, 102, 102))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(149, 149, 149)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2)
+                    .addComponent(LUserName2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(lUser3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lUser2)
-                    .addComponent(lUser4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(lUser3)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LAmount))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(LUserName3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(45, 45, 45)
-                .addComponent(lUser1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lUser2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LUserName2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lUser1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lUser4)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel1))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(LTimer)))
+                        .addGap(12, 12, 12)
+                        .addComponent(LUserName4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(4, 4, 4)
+                .addComponent(LUserName1)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(21, 21, 21)
-                    .addComponent(jLabel4)
-                    .addContainerGap(373, Short.MAX_VALUE)))
         );
 
         lUser1.getAccessibleContext().setAccessibleName("lUser1");
@@ -221,7 +304,9 @@ public class fClient extends javax.swing.JFrame {
                         .addComponent(jButton3))
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -249,6 +334,10 @@ public class fClient extends javax.swing.JFrame {
         if(lUser1.isEnabled()){
             lUser1.setEnabled(false);
             client.Ready(false);
+            if(timer.isRunning())
+                timer.stop();
+                LTimer.setText("Đang chờ người chơi");
+            
         }
         else{
             lUser1.setEnabled(true);
@@ -271,8 +360,9 @@ public class fClient extends javax.swing.JFrame {
         
         client.SendMessage(client.name + " đã thoát khỏi phòng",true);
         try {
-            client.socket.close();
             this.dispose();
+            client.socket.close();
+            
         } catch (IOException ex) {
             Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -292,40 +382,54 @@ public class fClient extends javax.swing.JFrame {
          
     }//GEN-LAST:event_formWindowClosing
 
+    private void scissor_choose(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scissor_choose
+      choose = 1;
+        
+    }//GEN-LAST:event_scissor_choose
+
+    private void rock_choose(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rock_choose
+        choose = 2;
+    }//GEN-LAST:event_rock_choose
+
+    private void paper_choose(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paper_choose
+       choose = 3;
+    }//GEN-LAST:event_paper_choose
+
+  
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new fClient(1,"minh",9999).setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new fClient(1,"minh",9999).setVisible(true);
+//            }
+//        });
+//    }
 
     
     
@@ -339,14 +443,15 @@ public class fClient extends javax.swing.JFrame {
     private int port;
     public boolean isActive = true;
     public boolean isReady;
+    private int amount;
     ClientObject[] users ;
     
-    public Client(int id, String name,String address, int port){
+    public Client(int id, String name,String address, int port,int amount){
         this.id = id;
         this.name = name;
         this.address = address;
         this.port = port;
-               
+        this.amount = amount;
     }
     
 //    @Override
@@ -369,7 +474,13 @@ public class fClient extends javax.swing.JFrame {
         SendMessage("", isReady);
         
     }
-    
+    public boolean isAllReady(){
+        for(ClientObject user : users){
+            if(user != null)
+            if(!user.isReady) return false;
+        }
+        return true;
+    }
     
     
 //    @Override
@@ -410,24 +521,54 @@ public class fClient extends javax.swing.JFrame {
                     }
                 }
                 else if(object instanceof ClientObject[]){
-                    ClientObject[] usersz = (ClientObject[])object;
+//                    ClientObject[] usersz = (ClientObject[])object;
                     users =(ClientObject[])object;
                     int i = 0;
-                   for(ClientObject user : users){
-                       if(user == null) continue;
-                       if(user.id != id){
-                           labels[i].setEnabled(user.isReady);
-                           i++;
-                           System.out.println("fuck " + i);
+                   for(JLabel label : labels){
+                       if(users[i] == null) {
+                           labels[i].setEnabled(false);
+                           userNames[i].setText("");
                        }
+                       else if(users[i].id != id){
+                           labels[i].setEnabled(users[i].isReady);
+                           userNames[i].setText(users[i].name);
+                          
+                       }
+                       i++;
+                   }
+                   //everyone isready
+                   if(isAllReady()){
+                       
+                       timer = new Timer(1000, new ActionListener() {
+                           int i = 15;
+                           @Override
+                           public void actionPerformed(ActionEvent ae) {
+                            try {
+                                     if(i == 0){
+                                         ((Timer)ae.getSource()).stop();
+                                         //send choose to server
+                                         System.out.println("player choose " + choose);
+                                     }
+                                     LTimer.setText(i+" giây");
+                                     i--;
+                                     Thread.sleep(1000);
+                                 } catch (InterruptedException ex) {
+                                     Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
+                                 }
+                           }
+                       });
+                       timer.start();
+                       
                    }
                 }
             }
         } catch (IOException ex) {
             System.out.println("Can't connect "+ ex.getMessage());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(0);
         }
+        catch (ClassNotFoundException ex) {
+            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
 
        
@@ -435,6 +576,12 @@ public class fClient extends javax.swing.JFrame {
 }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel LAmount;
+    private javax.swing.JLabel LTimer;
+    private javax.swing.JLabel LUserName1;
+    private javax.swing.JLabel LUserName2;
+    private javax.swing.JLabel LUserName3;
+    private javax.swing.JLabel LUserName4;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -445,6 +592,7 @@ public class fClient extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
