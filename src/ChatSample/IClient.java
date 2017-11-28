@@ -12,8 +12,7 @@ package ChatSample;
 interface IClient {
     
     void SendMessage(String message,boolean isReady);
-    void UpdateChat(String message);
-//    boolean Connect(String address, int port);
-    boolean Disconnect();
+    void ReceiveMessage(String message);
+    boolean isAllReady();
     
 }

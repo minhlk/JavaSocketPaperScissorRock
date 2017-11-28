@@ -1,12 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ChatSample;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -14,20 +7,20 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.Timer;
 
 /**
  *
  * @author HK
  */
 public class fClient extends javax.swing.JFrame {
-    Timer timer;
+    Thread timer;
     Client client;
     JLabel[] labels = new JLabel[3];
     JLabel[] userNames = new JLabel[3];
-    byte choose = 1;
+    Icon scissor ,rock,paper;
     public fClient(int id,String userName,int port,int amount) {
         initComponents();
          client = new Client(id,userName,"localhost",port,amount);
@@ -41,6 +34,11 @@ public class fClient extends javax.swing.JFrame {
         userNames[1] = LUserName3;
         userNames[2] = LUserName4;
         
+        
+        scissor = jButton4.getIcon();
+        rock = jButton5.getIcon();
+        paper = jButton6.getIcon();
+        LChoose.setVisible(false);
        LAmount.setText(amount+" Coin");
     }
 
@@ -53,6 +51,7 @@ public class fClient extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -62,29 +61,33 @@ public class fClient extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        lUser2 = new javax.swing.JLabel();
         lUser1 = new javax.swing.JLabel();
         lUser3 = new javax.swing.JLabel();
         lUser4 = new javax.swing.JLabel();
         LUserName1 = new javax.swing.JLabel();
-        LUserName2 = new javax.swing.JLabel();
         LUserName3 = new javax.swing.JLabel();
         LUserName4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         LAmount = new javax.swing.JLabel();
         LTimer = new javax.swing.JLabel();
+        LChoose = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        lUser2 = new javax.swing.JLabel();
+        LUserName2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jSeparator3 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton1.setText("Sẵn sàng");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -92,6 +95,7 @@ public class fClient extends javax.swing.JFrame {
                 Client_Ready(evt);
             }
         });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(728, 11, 110, 50));
 
         jButton2.setText("Thoát");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -99,6 +103,7 @@ public class fClient extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, 80, 50));
 
         jButton3.setText("Send");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -106,243 +111,139 @@ public class fClient extends javax.swing.JFrame {
                 Send(evt);
             }
         });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 480, -1, 30));
+        getContentPane().add(tClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 480, 128, 30));
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Layer 2.png"))); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Layer2.png"))); // NOI18N
+        buttonGroup1.add(jButton4);
+        jButton4.setEnabled(false);
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 scissor_choose(evt);
             }
         });
+        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 101, -1));
 
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Layer 3.png"))); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Layer3.png"))); // NOI18N
+        buttonGroup1.add(jButton5);
+        jButton5.setEnabled(false);
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rock_choose(evt);
             }
         });
+        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 210, 81));
 
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Layer 4.png"))); // NOI18N
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Layer4.png"))); // NOI18N
+        buttonGroup1.add(jButton6);
+        jButton6.setEnabled(false);
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 paper_choose(evt);
             }
         });
+        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, 100, 81));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
-
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 190, -1, -1));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 390, -1, 72));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
-
-        lUser2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lUser2.setForeground(new java.awt.Color(255, 51, 102));
-        lUser2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lUser2.setText("Sẵn sàng");
-        lUser2.setEnabled(false);
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, -1, -1));
 
         lUser1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lUser1.setForeground(new java.awt.Color(255, 51, 102));
         lUser1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lUser1.setText("Sẵn sàng");
         lUser1.setEnabled(false);
+        jPanel1.add(lUser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 360, 150, 25));
+        lUser1.getAccessibleContext().setAccessibleName("lUser1");
 
         lUser3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lUser3.setForeground(new java.awt.Color(255, 51, 102));
         lUser3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lUser3.setText("Sẵn sàng");
         lUser3.setEnabled(false);
+        jPanel1.add(lUser3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, 150, 25));
 
         lUser4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lUser4.setForeground(new java.awt.Color(255, 51, 102));
         lUser4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lUser4.setText("Sẵn sàng");
         lUser4.setEnabled(false);
+        jPanel1.add(lUser4, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 160, 150, 25));
 
+        LUserName1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LUserName1.setText("UserName");
+        LUserName1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel1.add(LUserName1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 470, 150, 25));
+        jPanel1.add(LUserName3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 110, 150, 25));
+        jPanel1.add(LUserName4, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 260, 150, 25));
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 0, 51));
         jLabel5.setText("Số tiền hiện có : ");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 60));
 
+        LAmount.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         LAmount.setText("0");
+        jPanel1.add(LAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 71, 60));
 
         LTimer.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         LTimer.setForeground(new java.awt.Color(255, 51, 51));
         LTimer.setText("Đang chờ người chơi");
+        jPanel1.add(LTimer, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 210, -1, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lUser2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(LAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(110, 110, 110)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lUser3, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(14, 14, 14))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(311, 311, 311)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(LUserName1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel4))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(330, 330, 330)
-                        .addComponent(LUserName3, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(281, 281, 281)
-                                .addComponent(lUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(LTimer)
-                                .addGap(121, 121, 121)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lUser4, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addComponent(jLabel1)
-                                .addGap(35, 35, 35))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
-                                .addComponent(LUserName4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(52, 52, 52)))))
-                .addGap(102, 102, 102))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(149, 149, 149)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2)
-                    .addComponent(LUserName2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lUser3)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(LAmount))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(LUserName3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lUser2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LUserName2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lUser1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lUser4)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(LTimer)))
-                        .addGap(12, 12, 12)
-                        .addComponent(LUserName4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addGap(4, 4, 4)
-                .addComponent(LUserName1)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+        LChoose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Layer2.png"))); // NOI18N
+        jPanel1.add(LChoose, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 390, 50, 80));
 
-        lUser1.getAccessibleContext().setAccessibleName("lUser1");
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, -1));
+
+        lUser2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lUser2.setForeground(new java.awt.Color(255, 51, 102));
+        lUser2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lUser2.setText("Sẵn sàng");
+        lUser2.setEnabled(false);
+        jPanel1.add(lUser2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 150, 25));
+        jPanel1.add(LUserName2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 150, 25));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(tClient)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3))
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
-                .addContainerGap())
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(728, 66, 190, 400));
+        getContentPane().add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 520, 940, 10));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void Client_Ready(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Client_Ready
     
-        if(lUser1.isEnabled()){
-            lUser1.setEnabled(false);
-            client.Ready(false);
-            if(timer.isRunning())
-                timer.stop();
-                LTimer.setText("Đang chờ người chơi");
-            
-        }
-        else{
+//        if(lUser1.isEnabled()){
+//            lUser1.setEnabled(false);
+//            client.currentUser.choose = -1;
+//            client.Ready(false);
+//            LTimer.setText("Đang chờ người chơi");
+//            
+//        }
+//        else{
             lUser1.setEnabled(true);
-            client.Ready(true);
-        }
+            client.SendMessage("",true);
+            jButton1.setEnabled(false);
+            
+//        }
     }//GEN-LAST:event_Client_Ready
 
     private void Send(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Send
@@ -351,14 +252,17 @@ public class fClient extends javax.swing.JFrame {
         
         
         if(!tClient.getText().isEmpty()){
-            client.SendMessage(tClient.getText(),true);
+            client.SendMessage(tClient.getText(),false);
+            String mess =  "You : " + tClient.getText();
+            client.ReceiveMessage(mess);
+            tClient.setText("");
         }
         
     }//GEN-LAST:event_Send
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
-        client.SendMessage(client.name + " đã thoát khỏi phòng",true);
+        client.SendMessage(client.currentUser.name + " đã thoát khỏi phòng",true);
         try {
             this.dispose();
             client.socket.close();
@@ -373,7 +277,7 @@ public class fClient extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         
-        client.SendMessage(client.name + " đã thoát khỏi phòng",true);
+        client.SendMessage(client.currentUser.name + " đã thoát khỏi phòng",true);
           try {
             client.socket.close();
         } catch (IOException ex) {
@@ -383,97 +287,63 @@ public class fClient extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void scissor_choose(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scissor_choose
-      choose = 1;
-        
+//      choose = 1;
+       client.currentUser.choose = 1;
+       LChoose.setIcon(scissor);
     }//GEN-LAST:event_scissor_choose
 
     private void rock_choose(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rock_choose
-        choose = 2;
+//        choose = 2;
+        client.currentUser.choose = 2;
+        LChoose.setIcon(rock);
+        
     }//GEN-LAST:event_rock_choose
 
     private void paper_choose(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paper_choose
-       choose = 3;
+//       choose = 3;
+        client.currentUser.choose = 3;
+        LChoose.setIcon(paper);
     }//GEN-LAST:event_paper_choose
-
-  
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(fClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new fClient(1,"minh",9999).setVisible(true);
-//            }
-//        });
-//    }
-
     
-    
-    public class Client implements Runnable {
+    public class Client implements Runnable,IClient {
     
     private ObjectInputStream reader ;
     private ObjectOutputStream writer;
     private Socket socket;
-    private String name,address;
-    private int id;
-    private int port;
-    public boolean isActive = true;
-    public boolean isReady;
-    private int amount;
-    ClientObject[] users ;
-    
+    private final String address;
+    private final int port;
+    private ClientObject[] users ;
+    private ClientObject currentUser;
     public Client(int id, String name,String address, int port,int amount){
-        this.id = id;
-        this.name = name;
         this.address = address;
         this.port = port;
-        this.amount = amount;
+        currentUser = new ClientObject(id, "", name, false);
+        currentUser.amount = amount;
     }
     
-//    @Override
+    @Override
     public void SendMessage( String message,boolean isReady) {
        
         try {
-            writer.writeObject(new ClientObject(id ,message, name, isReady));
+            currentUser.message = message;
+            currentUser.isReady = isReady;
+            
+            ClientObject client = currentUser;
+            writer.writeObject(client);
+            writer.reset();
+           
         } catch (IOException ex) {
             Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
-//    @Override
+    
+    @Override
     public void ReceiveMessage(String message) {
         jTextArea1.append( message + "\n");
     }
     
-    public void Ready(boolean isReady){
-
-        SendMessage("", isReady);
-        
-    }
+    @Override
     public boolean isAllReady(){
         for(ClientObject user : users){
             if(user != null)
@@ -481,55 +351,70 @@ public class fClient extends javax.swing.JFrame {
         }
         return true;
     }
-    
-    
-//    @Override
-    public boolean Disconnect() {
-        return true;
-    }
 
-        @Override
-        public void run() {
+    @Override
+    public void run() {
              try {
             socket = new Socket(address, port);
                  InputStream is = socket.getInputStream();
             if(is.read() == 1){
                 JOptionPane.showMessageDialog( null,"phòng đầy ");
+                System.exit(0);
                 return;
+                
             }
             // to read from server
             reader = new ObjectInputStream(socket.getInputStream());
             // to write to server
             writer = new ObjectOutputStream(socket.getOutputStream());
-            writer.writeObject(new ClientObject(id,"", name, isReady));
-            writer.writeObject(new ClientObject(id,name + " vừa vào phòng", name, isReady));
+            writer.writeObject(currentUser);
+            writer.reset();
+            currentUser.message = currentUser.name + " vừa vào phòng";
+            writer.writeObject(currentUser);
             
-//            writer.flush();
             String mess;
             while(true){
                 System.out.println("client is watting");
-                Object object = reader.readUnshared();
+                Object object = reader.readObject();
                 
                 if(object instanceof ClientObject){
+                    
                     ClientObject user = (ClientObject)object;
-                    if(user.message.isEmpty() &&  user.isReady){
-//                        System.out.println("fk");
-                    }
-                    else{
+                    //receive message from other players
+                    if(!user.message.isEmpty() && user.id != currentUser.id){
                     mess = user.name + " : " + user.message;
                     ReceiveMessage(mess);
                     }
                 }
                 else if(object instanceof ClientObject[]){
-//                    ClientObject[] usersz = (ClientObject[])object;
                     users =(ClientObject[])object;
+                  
+                    int winAmount = 0;
+                    for(ClientObject user : users){
+                        if(user != null)
+                        if(user.id == currentUser.id){
+                            winAmount = user.amount - currentUser.amount;
+                            currentUser = user;
+                            break;
+                        }
+                    }
+                       LAmount.setText(currentUser.amount + " Coin");
+                        //receive new amount after play game
+                        //if win
+                        if(winAmount > 0){
+                            JOptionPane.showMessageDialog(null ,"Bạn thắng");
+                        }
+                        //if lose
+                        else if(winAmount < 0){
+                            JOptionPane.showMessageDialog(null ,"Bạn thua");
+                        }
                     int i = 0;
                    for(JLabel label : labels){
                        if(users[i] == null) {
                            labels[i].setEnabled(false);
                            userNames[i].setText("");
                        }
-                       else if(users[i].id != id){
+                       else if(users[i].id != currentUser.id){
                            labels[i].setEnabled(users[i].isReady);
                            userNames[i].setText(users[i].name);
                           
@@ -537,28 +422,9 @@ public class fClient extends javax.swing.JFrame {
                        i++;
                    }
                    //everyone isready
-                   if(isAllReady()){
-                       
-                       timer = new Timer(1000, new ActionListener() {
-                           int i = 15;
-                           @Override
-                           public void actionPerformed(ActionEvent ae) {
-                            try {
-                                     if(i == 0){
-                                         ((Timer)ae.getSource()).stop();
-                                         //send choose to server
-                                         System.out.println("player choose " + choose);
-                                     }
-                                     LTimer.setText(i+" giây");
-                                     i--;
-                                     Thread.sleep(1000);
-                                 } catch (InterruptedException ex) {
-                                     Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
-                                 }
-                           }
-                       });
-                       timer.start();
-                       
+                    if(isAllReady()){                  
+                            timer = new Thread(new CountdownTimer(this));
+                            timer.start();   
                    }
                 }
             }
@@ -570,18 +436,54 @@ public class fClient extends javax.swing.JFrame {
             Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }
-
-       
-    
+  
 }
+    public class CountdownTimer implements Runnable{
+        Client client;
+        public CountdownTimer(Client client){
+            this.client = client;
+        }
+        @Override
+        public void run() {   
+            LChoose.setIcon(scissor);
+            LChoose.setVisible(true);
+            jButton5.setEnabled(true);
+            jButton6.setEnabled(true);
+            jButton4.setEnabled(true);
+            for(int i = 15 ; i >= 0; i--){
+               
+                try {
+                     LTimer.setText(i+" giây");
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    return;
+                }
+            }
+            //send choose to server
+            System.out.println("player choose " + client.currentUser.choose);
+            if(client.currentUser.choose == -1)
+                client.currentUser.choose = 1;
+            lUser1.setEnabled(false);
+            client.SendMessage("", true);
+            jButton1.setEnabled(true);
+            jButton5.setEnabled(false);
+            jButton6.setEnabled(false);
+            jButton4.setEnabled(false);
+             LChoose.setVisible(false);
+            LTimer.setText("Đang chờ người chơi");
+        }
+        
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LAmount;
+    private javax.swing.JLabel LChoose;
     private javax.swing.JLabel LTimer;
     private javax.swing.JLabel LUserName1;
     private javax.swing.JLabel LUserName2;
     private javax.swing.JLabel LUserName3;
     private javax.swing.JLabel LUserName4;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -595,6 +497,7 @@ public class fClient extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lUser1;
     private javax.swing.JLabel lUser2;

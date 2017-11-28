@@ -176,13 +176,25 @@ public class fServer extends javax.swing.JFrame {
 
                     System.out.println("server is watting");
                     ClientObject client =(ClientObject)reader.readObject();
+                    
+                       
+                    if(!ServerHandler.Contain(client)){
+                        id = client.id;
+                        ServerHandler.users.add(client);
+                    }
                     if(client.message.isEmpty() ){
-                        if(!ServerHandler.Contain(client.id, client.isReady)){
-                            id = client.id;
-                            ServerHandler.users.add(client);
+                        if(client.choose != -1){
+                            if(ServerHandler.isAllReady() && !ServerHandler.isMessAllSet()){
+                                continue;
+                            }
+                            else{
+                                ServerHandler.checkWin();
+//                                ServerHandler.setDefaultAll();
+                                
+                            }
+//                            else continue;
                         }
                             //update new users
-//                            writer.reset();
                              for(ObjectOutputStream write : ServerHandler.GetOOS()){
                                 write.writeObject(ServerHandler.users.toArray(new ClientObject[4]));
                                 write.reset();
@@ -192,7 +204,9 @@ public class fServer extends javax.swing.JFrame {
                       
                     
                     for(ObjectOutputStream write : ServerHandler.GetOOS()){
-                        write.writeObject(new ClientObject(client.id ,client.message, client.name, client.isReady));
+//                        ClientObject user = cline
+                        write.writeObject(client);
+                        write.reset();
                     }
 
                     tServer.append(client.message + "\n");
@@ -200,8 +214,6 @@ public class fServer extends javax.swing.JFrame {
                 }
         } catch (IOException ex) {
              System.out.println("Can't create thread for client " + ex.getMessage());
-             //remove from users ???????
-             //????
              ServerHandler.RemoveUser(id);
              for(ObjectOutputStream write : ServerHandler.GetOOS()){
                  try {
@@ -231,7 +243,7 @@ public class fServer extends javax.swing.JFrame {
     
     public class Server implements Runnable{
     private int port;
-    private boolean isRunning = true;
+    private boolean isRunning = false;
     private ServerSocket server;
     private ThreadPoolExecutor execute;
             
@@ -253,7 +265,6 @@ public class fServer extends javax.swing.JFrame {
                 if(CountActive() > 2 ){
                     System.out.println("phong da day");
                     sock.getOutputStream().write(1);
-//                    JOptionPane.showMessageDialog(null, "phong da day");
                 }
                 else{
                     sock.getOutputStream().write(0);
@@ -276,6 +287,7 @@ public class fServer extends javax.swing.JFrame {
         if(isRunning)
         try {
             server.close();
+            execute.shutdown();
         } catch (IOException ex) {
             System.out.println("Server can't stop " + ex.getMessage());
         }
@@ -292,35 +304,91 @@ public class fServer extends javax.swing.JFrame {
 }
     public static class ServerHandler{
      private static ArrayList<ObjectOutputStream> oos = new ArrayList<>();
-     public static ArrayList<ClientObject> users = new ArrayList<>();
+     public  static ArrayList<ClientObject> users = new ArrayList<>();
      public static ArrayList<ObjectOutputStream> GetOOS(){
          return oos;
          
      }
-     public static void Remove(ObjectOutputStream os){
+     public synchronized static void Remove(ObjectOutputStream os){
          oos.remove(os);
      }
-      public static void Add(ObjectOutputStream os){
+      public synchronized static void Add(ObjectOutputStream os){
          oos.add(os);
      }
-      public static boolean Contain(int id,boolean isReady){
-          for(int i = 0 ; i < users.size() ; i++){
-              if(users.get(i).id == id){
-                  ClientObject user = users.get(i);
-                  user.isReady = isReady;
+      public synchronized static boolean Contain(ClientObject client){
+          
+       
+               for(int i = 0 ; i < users.size() ; i++){
+              if(users.get(i).id == client.id){
+                  ClientObject user = client;
                   users.set(i, user);
                   return true;
               }
           }
            return false;
+          
+         
       }
-       public static void RemoveUser(int id){
-          for(int i = 0 ; i < users.size() ; i++){
-              if(users.get(i).id == id){
-                 users.remove(i);
-              }
-     }
-    }  
+       public  synchronized static void RemoveUser(int id){
+         
+                for(int i = 0 ; i < users.size() ; i++){
+                    if(users.get(i).id == id){
+                       users.remove(i);
+                    }
+                }
+           
+      }  
+       public synchronized static boolean isAllReady(){
+           for(ClientObject user : users){
+               if(!user.isReady ) return false;
+           }
+           return true;
+       }
+      public synchronized static boolean isMessAllSet(){
+          
+       
+               for(int i = 0 ; i < users.size() ; i++){
+                   if(users.get(i).choose == -1)
+                       return false;
+               }
+           return true;
+          
+         
+      }
+
+        private static void setDefaultAll() {
+          
+               for(int i = 0 ; i < users.size() ; i++){
+                   ClientObject user = users.get(i);
+                   user.choose = -1;
+                    user.isReady = false;
+                       users.set(i, user);
+               }
+        }
+        private static void checkWin(){
+            //edit calculate winner algorithm again @@
+                  for(int i = 0 ; i < users.size() - 1;i++){
+                      for(int j = i+ 1; j < users.size();j++){
+                        ClientObject user1 = users.get(i);
+                        ClientObject user2 = users.get(j);
+                        byte one = user1.choose;
+                        byte two = user2.choose;
+                        if(one  -  two == 1 || two - one == 2 ){
+                            user1.amount += 10;
+                             users.set(i, user1);
+                            user2.amount -= 10;
+                             users.set(j, user2);
+                        }
+                        else if(one  -  two == -1 || two - one == -2 ){
+                            user1.amount -= 10;
+                             users.set(i, user1);
+                            user2.amount += 10;
+                             users.set(j, user2);
+                        }
+                      }
+                  }
+                  setDefaultAll();
+        }
     }
     
     

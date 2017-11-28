@@ -23,13 +23,17 @@ public class ClientObject implements Serializable{
     
     public boolean isReady;
     
+    //1 scisscor
+    //2 rock
+    //3 paper
+    
+    public byte choose = -1;
+    
     public ClientObject(int id,String message, String name, boolean isReady) {
         this.id = id;
         this.message = message;
         this.name = name;
         this.isReady = isReady;
-        
-//        this.amount = 100;
     }
     
     
