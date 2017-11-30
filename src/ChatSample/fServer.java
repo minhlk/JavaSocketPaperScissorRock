@@ -160,7 +160,7 @@ public class fServer extends javax.swing.JFrame {
     ObjectInputStream reader; 
     ObjectOutputStream writer;
     public boolean isActive = true;
-    public int id = 0;
+    public long id = 0;
     
 
     public ClientHandler(Socket socket,ObjectOutputStream out,ObjectInputStream in){
@@ -288,6 +288,7 @@ public class fServer extends javax.swing.JFrame {
         try {
             server.close();
             execute.shutdown();
+            System.exit(0);
         } catch (IOException ex) {
             System.out.println("Server can't stop " + ex.getMessage());
         }
@@ -329,7 +330,7 @@ public class fServer extends javax.swing.JFrame {
           
          
       }
-       public  synchronized static void RemoveUser(int id){
+       public  synchronized static void RemoveUser(long id){
          
                 for(int i = 0 ; i < users.size() ; i++){
                     if(users.get(i).id == id){

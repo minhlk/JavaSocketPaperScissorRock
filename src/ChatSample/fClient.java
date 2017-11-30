@@ -21,7 +21,7 @@ public class fClient extends javax.swing.JFrame {
     JLabel[] labels = new JLabel[3];
     JLabel[] userNames = new JLabel[3];
     Icon scissor ,rock,paper;
-    public fClient(int id,String userName,int port,int amount) {
+    public fClient(long id,String userName,int port,long amount) {
         initComponents();
          client = new Client(id,userName,"localhost",port,amount);
         (new Thread(client)).start();
@@ -314,7 +314,7 @@ public class fClient extends javax.swing.JFrame {
     private final int port;
     private ClientObject[] users ;
     private ClientObject currentUser;
-    public Client(int id, String name,String address, int port,int amount){
+    public Client(long id, String name,String address, int port,long amount){
         this.address = address;
         this.port = port;
         currentUser = new ClientObject(id, "", name, false);
@@ -389,7 +389,7 @@ public class fClient extends javax.swing.JFrame {
                 else if(object instanceof ClientObject[]){
                     users =(ClientObject[])object;
                   
-                    int winAmount = 0;
+                    long winAmount = 0;
                     for(ClientObject user : users){
                         if(user != null)
                         if(user.id == currentUser.id){

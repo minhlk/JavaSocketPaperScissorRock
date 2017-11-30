@@ -13,13 +13,13 @@ import java.io.Serializable;
  */
 public class ClientObject implements Serializable{
     
-    public int id;
+    public long id;
     
     public String message;
 
     public String name;
     
-    public int amount;
+    public long amount;
     
     public boolean isReady;
     
@@ -29,7 +29,7 @@ public class ClientObject implements Serializable{
     
     public byte choose = -1;
     
-    public ClientObject(int id,String message, String name, boolean isReady) {
+    public ClientObject(long id,String message, String name, boolean isReady) {
         this.id = id;
         this.message = message;
         this.name = name;
