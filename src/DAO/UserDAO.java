@@ -19,7 +19,17 @@ import org.hibernate.Transaction;
 public class UserDAO {
     
     
-    
+    public void EditAmount(long newAmount,long Id){
+        
+        Session session = NewHibernateUtil.getSessionFactory().openSession();
+	session.beginTransaction();	
+        User s = (User) session.get(User.class, Id);
+        s.setAmount(newAmount);
+        session.update(s);
+        session.getTransaction().commit();
+        session.close();
+        
+    }
     public User Login(User user){
         Query query= NewHibernateUtil.getSessionFactory().openSession().
         createQuery("from User where userName=:userName and password=:password");
@@ -35,7 +45,6 @@ public class UserDAO {
           Transaction tx = null;
         try{
         tx = session.beginTransaction();
-//        User temp = new User();
         session.save(user);
         tx.commit();
         }

@@ -1,9 +1,11 @@
 package ChatSample;
 
+import Model.User;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,25 +23,27 @@ public class fClient extends javax.swing.JFrame {
     JLabel[] labels = new JLabel[3];
     JLabel[] userNames = new JLabel[3];
     Icon scissor ,rock,paper;
-    public fClient(long id,String userName,int port,long amount) {
+    boolean isActive = true;
+    public fLogin flogin;
+    public fClient(int port,User user,fLogin flogin) {
         initComponents();
-         client = new Client(id,userName,"localhost",port,amount);
+        this.flogin = flogin;
+         client = new Client(user,"localhost",port);
         (new Thread(client)).start();
         
-        labels[0] = lUser2;
-        labels[1] = lUser3;
-        labels[2] = lUser4;
-        LUserName1.setText(userName);
-        userNames[0] = LUserName2;
-        userNames[1] = LUserName3;
-        userNames[2] = LUserName4;
-        
-        
-        scissor = jButton4.getIcon();
-        rock = jButton5.getIcon();
-        paper = jButton6.getIcon();
-        LChoose.setVisible(false);
-       LAmount.setText(amount+" Coin");
+                labels[0] = lUser2;
+                labels[1] = lUser3;
+                labels[2] = lUser4;
+                
+                userNames[0] = LUserName2;
+                userNames[1] = LUserName3;
+                userNames[2] = LUserName4;
+
+
+                scissor = jButton4.getIcon();
+                rock = jButton5.getIcon();
+                paper = jButton6.getIcon();
+                LChoose.setVisible(false);
     }
 
     /**
@@ -190,11 +194,11 @@ public class fClient extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 0, 51));
         jLabel5.setText("Số tiền hiện có : ");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 60));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 30));
 
         LAmount.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         LAmount.setText("0");
-        jPanel1.add(LAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 71, 60));
+        jPanel1.add(LAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 71, 30));
 
         LTimer.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         LTimer.setForeground(new java.awt.Color(255, 51, 51));
@@ -314,11 +318,13 @@ public class fClient extends javax.swing.JFrame {
     private final int port;
     private ClientObject[] users ;
     private ClientObject currentUser;
-    public Client(long id, String name,String address, int port,long amount){
+    private User user;
+    public Client(User user,String address, int port){
         this.address = address;
         this.port = port;
-        currentUser = new ClientObject(id, "", name, false);
-        currentUser.amount = amount;
+        this.user = user;
+       
+        
     }
     
     @Override
@@ -357,6 +363,7 @@ public class fClient extends javax.swing.JFrame {
              try {
             socket = new Socket(address, port);
                  InputStream is = socket.getInputStream();
+                 OutputStream out = socket.getOutputStream();
             if(is.read() == 1){
                 JOptionPane.showMessageDialog( null,"phòng đầy ");
                 System.exit(0);
@@ -367,6 +374,29 @@ public class fClient extends javax.swing.JFrame {
             reader = new ObjectInputStream(socket.getInputStream());
             // to write to server
             writer = new ObjectOutputStream(socket.getOutputStream());
+            
+            writer.writeObject(user);
+//            int loginRs = is.read();
+            User loginRs = (User) reader.readObject();
+            if(loginRs == null){
+                //fail to login
+                 JOptionPane.showMessageDialog( null,"Sai tài khoản hoặc mật khẩu");
+                 return;
+                 
+            }
+            else{
+                 JOptionPane.showMessageDialog( null,"Đăng nhập thành công");
+                 this.user = loginRs;
+                currentUser = new ClientObject(user.getId(), "", user.getUserName().trim(), false);
+                currentUser.amount = user.getAmount();
+                LUserName1.setText(currentUser.name.trim());
+               LAmount.setText(currentUser.amount + " Coin");
+               fClient.this.setVisible(true);
+               fClient.this.flogin.setVisible(false);
+            }
+            
+            
+            
             writer.writeObject(currentUser);
             writer.reset();
             currentUser.message = currentUser.name + " vừa vào phòng";

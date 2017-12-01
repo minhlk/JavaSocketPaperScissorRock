@@ -132,19 +132,13 @@ public class fLogin extends javax.swing.JFrame {
         
         String userName = jTextField1.getText();
         String password = jTextField2.getText();
-        UserDAO dao = new UserDAO();
+        
         User user = new User();
         user.setUserName(userName);
         user.setPassword(password);
-        User rs = dao.Login(user);
-        if(rs != null){
-             (new fClient(rs.getId(),rs.getUserName().trim(),9999,rs.getAmount())).setVisible(true);
-             this.setVisible(false);
-        }
-        else{
-            JOptionPane.showMessageDialog(null, "sai ten dang nhap hoac mat khau");
-        }
         
+        new fClient(9999,user,this);
+//        this.setVisible(false);
         
        
         
