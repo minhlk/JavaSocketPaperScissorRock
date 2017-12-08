@@ -198,7 +198,7 @@ public class fServer extends javax.swing.JFrame {
                 System.out.println("Server's starting");
                 // create thread for handle new client connect to server
                 Socket sock = server.accept();
-                if(CountActive() > 2 ){
+                if(CountActive() > 3 ){
                     System.out.println("phong da day");
                     sock.getOutputStream().write(1);
                 }
@@ -318,29 +318,26 @@ public class fServer extends javax.swing.JFrame {
                         byte one = user1.choose;
                         byte two = user2.choose;
                         if(one  -  two == 1 || two - one == 2 ){
-//                            user1.amount += 10;
-//                             users.set(i, user1);
-//                            user2.amount -= 10;
-//                             users.set(j, user2);
                                 rs[i] = true;
                                 rs[j] = false;
                         }
                         else if(one  -  two == -1 || two - one == -2 ){
-//                            user1.amount -= 10;
-//                             users.set(i, user1);
-//                            user2.amount += 10;
-//                             users.set(j, user2);
                                 rs[i] = false;
                                 rs[j] = true;
                         }
                       }
                   }
                   setDefaultAll();
+                  int numOfWin = 0;
+                   for(int i = 0 ; i < rs.length; i++)
+                       if(rs[i])
+                           numOfWin++;
+                  
                   for(int i = 0 ; i < rs.length; i++){
                       ClientObject temp = users.get(i);
                       //win
                       if(rs[i])
-                          temp.amount += 10;
+                          temp.amount += 10 / numOfWin;
                       else
                           temp.amount -= 10;
                       userDao.EditAmount(temp.amount, temp.id);
