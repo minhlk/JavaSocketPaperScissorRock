@@ -439,17 +439,18 @@ public class fClient extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(null ,"Bạn thua");
                         }
                     int i = 0;
+                    int j = 0;
                    for(JLabel label : labels){
                        if(users[i] == null) {
-                           labels[i].setEnabled(false);
-                           userNames[i].setText("");
+                           labels[j].setEnabled(false);
+                           userNames[j].setText("");
                        }
                        else if(users[i].id != currentUser.id){
-                           labels[i].setEnabled(users[i].isReady);
-                           userNames[i].setText(users[i].name);
-                          
+                           labels[j].setEnabled(users[i].isReady);
+                           userNames[j].setText(users[i].name);
+                           j++;
                        }
-                       i++;
+                      i++;
                    }
                    //everyone isready
                     if(isAllReady()){                  
