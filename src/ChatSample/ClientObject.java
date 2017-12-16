@@ -36,5 +36,4 @@ public class ClientObject implements Serializable{
         this.isReady = isReady;
     }
     
-    
 }

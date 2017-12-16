@@ -5,7 +5,7 @@
  */
 package DAO;
 
-import Model.User;
+import Model.Player;
 import Util.NewHibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -16,36 +16,35 @@ import org.hibernate.Transaction;
  *
  * @author HK
  */
-public class UserDAO {
+public class PlayerDAO {
     
     
     public void EditAmount(long newAmount,long Id){
         
         Session session = NewHibernateUtil.getSessionFactory().openSession();
 	session.beginTransaction();	
-        User s = (User) session.get(User.class, Id);
+        Player s = (Player) session.get(Player.class, Id);
         s.setAmount(newAmount);
         session.update(s);
         session.getTransaction().commit();
         session.close();
         
     }
-    public User Login(User user){
+    public Player Login(Player player){
         Query query= NewHibernateUtil.getSessionFactory().openSession().
-        createQuery("from User where userName=:userName and password=:password");
-        query.setParameter("userName", user.getUserName());
-        query.setParameter("password", user.getPassword());
-        User rs = (User) query.uniqueResult();
-       
-       return rs;
+        createQuery("from Player where playerName=:playerName and password=:password");
+        query.setParameter("playerName", player.getPlayerName());
+        query.setParameter("password", player.getPassword());
+        Player rs = (Player) query.uniqueResult();
+        return rs;
     }
     
-      public boolean AddUser(User user){
+      public boolean AddPlayer(Player player){
           Session session = NewHibernateUtil.getSessionFactory().openSession();
           Transaction tx = null;
         try{
         tx = session.beginTransaction();
-        session.save(user);
+        session.save(player);
         tx.commit();
         }
         catch(HibernateException e){
@@ -60,5 +59,12 @@ public class UserDAO {
     
        return true;
     }
+      public Player uniquePlayername(String name){
+          Query query= NewHibernateUtil.getSessionFactory().openSession().
+        createQuery("from Player where playerName=:playerName");
+        query.setParameter("playerName", name);
+        Player rs = (Player) query.uniqueResult();
+        return rs;
+      }
       
 }

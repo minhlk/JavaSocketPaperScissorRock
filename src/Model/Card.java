@@ -1,5 +1,5 @@
 package Model;
-// Generated Nov 30, 2017 6:43:39 PM by Hibernate Tools 4.3.1
+// Generated Dec 16, 2017 6:08:38 PM by Hibernate Tools 4.3.1
 
 
 import java.io.Serializable;
@@ -18,24 +18,24 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Card"
     ,schema="dbo"
-    ,catalog="scissorrockpaper"
+    ,catalog="SRP"
 )
 public class Card  implements java.io.Serializable {
 
 
      private long id;
-     private Serializable cardName;
+     private String cardName;
      private Set<Deposit> deposits = new HashSet<Deposit>(0);
 
     public Card() {
     }
 
 	
-    public Card(long id, Serializable cardName) {
+    public Card(long id, String cardName) {
         this.id = id;
         this.cardName = cardName;
     }
-    public Card(long id, Serializable cardName, Set<Deposit> deposits) {
+    public Card(long id, String cardName, Set<Deposit> deposits) {
        this.id = id;
        this.cardName = cardName;
        this.deposits = deposits;
@@ -55,11 +55,11 @@ public class Card  implements java.io.Serializable {
 
     
     @Column(name="CardName", nullable=false)
-    public Serializable getCardName() {
+    public String getCardName() {
         return this.cardName;
     }
     
-    public void setCardName(Serializable cardName) {
+    public void setCardName(String cardName) {
         this.cardName = cardName;
     }
 

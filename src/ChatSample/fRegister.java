@@ -7,8 +7,9 @@ package ChatSample;
 
 //import Hibernate.HibernateUtil;
 
-import DAO.UserDAO;
-import Model.User;
+import DAO.PlayerDAO;
+import Model.Player;
+import javax.swing.JOptionPane;
 
 //import Hibernate.Model.User;
 
@@ -42,6 +43,7 @@ public class fRegister extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         tPass = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        bRegister1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -57,7 +59,7 @@ public class fRegister extends javax.swing.JFrame {
                 RegisterAction(evt);
             }
         });
-        jPanel1.add(bRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(123, 230, 250, -1));
+        jPanel1.add(bRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 230, 250, -1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -81,6 +83,14 @@ public class fRegister extends javax.swing.JFrame {
         jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 93, 113, 52));
 
+        bRegister1.setText("Cancel");
+        bRegister1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bRegister1RegisterAction(evt);
+            }
+        });
+        jPanel1.add(bRegister1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, 250, -1));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 390, 300));
 
         pack();
@@ -88,22 +98,32 @@ public class fRegister extends javax.swing.JFrame {
 
     private void RegisterAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterAction
         
-        UserDAO model = new UserDAO();
+        PlayerDAO model = new PlayerDAO();
         String userName = tUserName.getText();
         String password = tPass.getText();
         String email = tEmail.getText();
         boolean rs = false;
-        if(!userName.isEmpty() && !password.isEmpty() && !email.isEmpty())
-        rs = model.AddUser(new User( userName
+        if(userName.isEmpty() && password.isEmpty() && email.isEmpty())
+            JOptionPane.showMessageDialog( null,"Cần nhập đầy đủ thông tin!");
+        else if (model.uniquePlayername(userName)!=null)
+            JOptionPane.showMessageDialog( null,"Tên đăng nhập đã tồn tại!");
+        else{
+            rs = model.AddPlayer(new Player( userName
                 , password
                 , email, 100));
-        System.out.println(rs);
+            JOptionPane.showMessageDialog( null,"Đăng ký thành công!");
+            this.dispose();
+        }
         
         
 //        (new fClient(Integer.parseInt(tEmail.getText().trim()),tUserName.getText().trim(),9999,100)).setVisible(true);
 //        this.setVisible(false);
         
     }//GEN-LAST:event_RegisterAction
+
+    private void bRegister1RegisterAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRegister1RegisterAction
+        this.dispose();
+    }//GEN-LAST:event_bRegister1RegisterAction
 
 //    /**
 //     * @param args the command line arguments
@@ -142,6 +162,7 @@ public class fRegister extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bRegister;
+    private javax.swing.JButton bRegister1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

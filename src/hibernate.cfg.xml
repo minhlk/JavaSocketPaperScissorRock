@@ -42,13 +42,13 @@ Contributor(s):
 <hibernate-configuration>
   <session-factory>
     <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-    <property name="hibernate.connection.url">jdbc:sqlserver://localhost\scissorrockpaper:1433;databaseName=scissorrockpaper</property>
+    <property name="hibernate.connection.url">jdbc:sqlserver://localhost\SRP:1433;databaseName=SRP</property>
     <property name="hibernate.connection.username">minhlk</property>
     <property name="hibernate.connection.password">123</property>
     <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
     <property name="hibernate.show_sql">true</property>
+    <mapping class="Model.Player"/>
     <mapping class="Model.Card"/>
     <mapping class="Model.Deposit"/>
-    <mapping class="Model.User"/>
   </session-factory>
 </hibernate-configuration>

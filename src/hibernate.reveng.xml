@@ -40,8 +40,8 @@ made subject to such option by the copyright holder.
 Contributor(s):
 -->
 <hibernate-reverse-engineering>
-  <schema-selection match-catalog="scissorrockpaper" match-schema="dbo"/>
-  <table-filter match-name="User"/>
-  <table-filter match-name="Deposit"/>
+  <schema-selection match-catalog="SRP" match-schema="dbo"/>
+  <table-filter match-name="Player"/>
   <table-filter match-name="Card"/>
+  <table-filter match-name="Deposit"/>
 </hibernate-reverse-engineering>

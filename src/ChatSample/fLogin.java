@@ -5,8 +5,9 @@
  */
 package ChatSample;
 
-import DAO.UserDAO;
-import Model.User;
+import Model.Player;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -133,13 +134,11 @@ public class fLogin extends javax.swing.JFrame {
         String userName = jTextField1.getText();
         String password = jTextField2.getText();
         
-        User user = new User();
-        user.setUserName(userName);
+        Player user = new Player();
+        user.setPlayerName(userName);
         user.setPassword(password);
         
-        new fClient(9999,user,this);
-//        this.setVisible(false);
-        
+        new fClient(1,user,this);
        
         
     }//GEN-LAST:event_jButton1ActionPerformed
