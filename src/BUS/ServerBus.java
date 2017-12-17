@@ -37,7 +37,7 @@ public class ServerBus {
             return true;
         }
     }
-    private void EndRoom(int num){
+    public void EndRoom(int num){
     
         if(roomMock.containsKey(num)){
             roomMock.get(num).EndServer();

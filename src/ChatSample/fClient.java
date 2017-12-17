@@ -20,7 +20,7 @@ import javax.swing.JTextField;
  */
 public class fClient extends javax.swing.JFrame {
     Thread timer;
-
+    public boolean isReady = false;
     public JButton getjButton1() {
         return jButton1;
     }
@@ -249,9 +249,6 @@ public class fClient extends javax.swing.JFrame {
     JLabel[] userNames = new JLabel[3];
     JLabel[] choose = new JLabel[3];
 
-    public void setVisiblez(boolean rs){
-        this.setVisible(rs);
-    }
     
     public JLabel[] getChoose() {
         return choose;
@@ -298,7 +295,8 @@ public class fClient extends javax.swing.JFrame {
                 LChoose3.setVisible(false);
                 LChoose4.setVisible(false);
                 
-                this.setVisible(true);
+//                this.setVisible(true);
+                
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -549,7 +547,7 @@ public class fClient extends javax.swing.JFrame {
         
         
         if(!tClient.getText().isEmpty()){
-            client.SendMessage(tClient.getText(),false);
+            client.SendMessage(tClient.getText(),isReady);
             String mess =  "You : " + tClient.getText();
             client.ReceiveMessage(mess);
             tClient.setText("");
@@ -620,9 +618,11 @@ public class fClient extends javax.swing.JFrame {
             JOptionPane.showMessageDialog( null,"Cần tối thiểu 2 người để chơi!");
         }
         else if(client.currentUser.amount>=10){
+            isReady = true;
             lUser1.setEnabled(true);
-            client.SendMessage("",true);
+            client.SendMessage("",isReady);
             jButton1.setEnabled(false);
+            
         }
         else
             JOptionPane.showMessageDialog(null,"Bạn không đủ coin để tham gia, hãy nạp thêm!");

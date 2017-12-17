@@ -7,6 +7,7 @@ package BUS;
 
 import ChatSample.ClientObject;
 import ChatSample.fClient;
+import Helper.OnlineUser;
 import Model.Player;
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,20 +104,13 @@ import javax.swing.JOptionPane;
             try {
             socket = new Socket("localhost", port);
                  InputStream is = socket.getInputStream();
-                 OutputStream out = socket.getOutputStream();
+//                 OutputStream out = socket.getOutputStream();
             while(is.read() == 1){
                 
                 //new line of code start
-                
-//                socket.close();
                  socket = new Socket(address, ++port);
                  is = socket.getInputStream();
                 //new line of code end
-                
-//                JOptionPane.showMessageDialog( null,"phòng đầy ");
-//                System.exit(0);
-//                return;
-                
             }
             isActive = true;
             // to read from server
@@ -125,7 +119,6 @@ import javax.swing.JOptionPane;
             writer = new ObjectOutputStream(socket.getOutputStream());
             
             writer.writeObject(user);
-//            int loginRs = is.read();
             Player loginRs = (Player) reader.readObject();
             if(loginRs == null){
                 //fail to login
@@ -134,15 +127,20 @@ import javax.swing.JOptionPane;
                  
             }
             else{
-                JOptionPane.showMessageDialog( null,"Đăng nhập thành công");
+                 if(loginRs.getId() == -1){
+                     JOptionPane.showMessageDialog( null,"tai khoan da duoc dang nhap");
+                     return;
+                 }
+                  JOptionPane.showMessageDialog( null,"Đăng nhập thành công");
                 this.user = loginRs;
+               
                 currentUser = new ClientObject(user.getId(), "", user.getPlayerName().trim(), false);
                 currentUser.amount = user.getAmount();
                  fclient.getLUserName1().setText(currentUser.name.trim());
                  fclient.getLAmount().setText(currentUser.amount + " Coin");
                 
-//                 fClient.setVisible(true);
-//                fClient.flogin.setVisible(false);
+                fclient.setVisible(true);
+                fclient.flogin.setVisible(false);
             }
             
             
@@ -190,6 +188,7 @@ import javax.swing.JOptionPane;
                                 JOptionPane.showMessageDialog(null ,"Bạn thua");
                             else JOptionPane.showMessageDialog(null ,"Hòa");
                             isPlaying=false;
+                            fclient.isReady = false;
                         }
                         
                     int i = 0;
@@ -242,6 +241,8 @@ import javax.swing.JOptionPane;
             System.out.println("Can't connect "+ ex.getMessage());
             if(!isActive)
                 JOptionPane.showMessageDialog( null,"phòng đầy ");
+//            else
+//                OnlineUser.RemoveUser(currentUser.id);
             System.exit(0);
         }
         catch (ClassNotFoundException ex) {

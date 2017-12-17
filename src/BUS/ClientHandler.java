@@ -6,6 +6,7 @@
 package BUS;
 
 import ChatSample.ClientObject;
+import Helper.OnlineUser;
 import ChatSample.fServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -80,6 +81,7 @@ import java.util.logging.Logger;
         } catch (IOException ex) {
              System.out.println("Can't create thread for client " + ex.getMessage());
              serverHandler.RemovePlayer(id);
+             OnlineUser.RemoveUser(id);
              for(ObjectOutputStream write : serverHandler.GetOOS()){
                  try {
                      write.writeObject(serverHandler.players.toArray(new ClientObject[4]));

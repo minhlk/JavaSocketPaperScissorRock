@@ -5,6 +5,7 @@
  */
 package BUS;
 
+import Helper.OnlineUser;
 import ChatSample.fServer;
 import DAO.PlayerDAO;
 import Model.Player;
@@ -57,7 +58,18 @@ import java.util.logging.Logger;
                     if((player = (Player)in.readObject()) instanceof Player){
                         PlayerDAO dao = new PlayerDAO();
                         Player rs = dao.Login(player);
+                        
+                 if(rs != null){
+                     if(!OnlineUser.AddUser(rs.getId())){
+                        rs.setId(-1);
                         out.writeObject(rs);
+                        continue;
+                     }
+                    
+                 }
+                         out.writeObject(rs);
+                        
+                        
                         if(rs == null)
                             continue;
                     }

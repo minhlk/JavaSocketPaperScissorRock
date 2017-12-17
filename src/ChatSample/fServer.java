@@ -2,6 +2,7 @@ package ChatSample;
 
 import BUS.ServerBus;
 import java.awt.Color;
+import javax.swing.JButton;
 
 /**
  *
@@ -9,12 +10,20 @@ import java.awt.Color;
  */
 public class fServer extends javax.swing.JFrame {
 
+    JButton[] btns = new JButton[8];
     ServerBus server;
     static public boolean isActive = false;
     public fServer() {
         initComponents();
         server = new ServerBus(this);
-        
+        btns[0] = b1;
+        btns[1] = b2;
+        btns[2] = b3;
+        btns[3] = b4;
+        btns[4] = b5;
+        btns[5] = b6;
+        btns[6] = b7;
+        btns[7] = b8;
     }
 
 
@@ -104,10 +113,18 @@ public class fServer extends javax.swing.JFrame {
 
     private void Server_Start(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Server_Start
        
+        for(int i = 1 ; i <=8 ; i++){
+            server.StartRoom(i);
+             btns[i - 1].setBackground(Color.RED);
+        }
+        
     }//GEN-LAST:event_Server_Start
 
     private void Server_End(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Server_End
-        
+         for(int i = 1 ; i <=8 ; i++){
+            server.EndRoom(i);
+            btns[i - 1].setBackground(Color.WHITE);
+        }
        
     }//GEN-LAST:event_Server_End
 
