@@ -15,20 +15,20 @@ import java.util.ArrayList;
  * @author HK
  */
 public class ServerHandler{
-    private static ArrayList<ObjectOutputStream> oos = new ArrayList<>();
-    public  static ArrayList<ClientObject> players = new ArrayList<ClientObject>();
-    private static PlayerDAO playerDao = new PlayerDAO();
-    public static ArrayList<ObjectOutputStream> GetOOS(){
+    private  ArrayList<ObjectOutputStream> oos = new ArrayList<>();
+    public   ArrayList<ClientObject> players = new ArrayList<ClientObject>();
+    private  PlayerDAO playerDao = new PlayerDAO();
+    public  ArrayList<ObjectOutputStream> GetOOS(){
          return oos;
          
      }
-    public synchronized static void Remove(ObjectOutputStream os){
+    public synchronized  void Remove(ObjectOutputStream os){
        oos.remove(os);
     }
-    public synchronized static void Add(ObjectOutputStream os){
+    public synchronized  void Add(ObjectOutputStream os){
        oos.add(os);
     }
-    public synchronized static boolean Contain(ClientObject client){
+    public synchronized  boolean Contain(ClientObject client){
             for(int i = 0 ; i < players.size() ; i++){
             if(players.get(i).id == client.id){
                ClientObject player = client;
@@ -38,20 +38,20 @@ public class ServerHandler{
         }
     return false;
     }
-    public synchronized static void RemovePlayer(long id){
+    public synchronized  void RemovePlayer(long id){
         for(int i = 0 ; i < players.size() ; i++){
             if(players.get(i).id == id){
                players.remove(i);
             }
         }     
     }  
-    public synchronized static boolean isAllReady(){
+    public synchronized  boolean isAllReady(){
         for(ClientObject player : players){
             if(!player.isReady ) return false;
         }
         return true;
     }
-    public synchronized static boolean isMessAllSet(){
+    public synchronized  boolean isMessAllSet(){
           
        
                for(int i = 0 ; i < players.size() ; i++){
@@ -60,20 +60,20 @@ public class ServerHandler{
                }
            return true;
       }
-    public synchronized static boolean isEndgame(){
+    public synchronized  boolean isEndgame(){
         for(ClientObject player : players){
             if(player.choose>=4 ) return true;
         }
         return false;
     }
-        public static void setDefaultChoice(){
+        public  void setDefaultChoice(){
             for(int i = 0 ; i < players.size() ; i++){
                     ClientObject player = players.get(i);
                     player.choose = -1;
                     players.set(i, player);
                }
         }
-        private static void setEndgame(){
+        private  void setEndgame(){
             for(int i = 0 ; i < players.size() ; i++){
                     ClientObject player = players.get(i);
                     player.choose +=3;
@@ -81,7 +81,7 @@ public class ServerHandler{
                        players.set(i, player);
                }
         }
-        public static void checkWin(){
+        public  void checkWin(){
             //edit calculate winner algorithm again @@
             /*boolean[] rs = new boolean[players.size()];
                 for(int i = 0 ; i < players.size() - 1;i++){
@@ -139,7 +139,7 @@ public class ServerHandler{
             System.out.println(list.size()+"       "+winchoice);
             setEndgame();
         }   
-        public static void chargeCard(ClientObject client){
+        public  void chargeCard(ClientObject client){
             client.amount=client.amount+100;
             playerDao.EditAmount(client.amount, client.id);
             setDefaultChoice();

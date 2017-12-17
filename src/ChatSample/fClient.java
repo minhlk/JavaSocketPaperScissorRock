@@ -1,20 +1,17 @@
 package ChatSample;
 
+import BUS.ClientBus;
 import Model.Player;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import java.util.*;
 import javax.swing.JFrame;
-import java.awt.event.WindowAdapter;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 
 /**
@@ -23,18 +20,262 @@ import java.awt.event.WindowAdapter;
  */
 public class fClient extends javax.swing.JFrame {
     Thread timer;
-    Client client;
+
+    public JButton getjButton1() {
+        return jButton1;
+    }
+
+    public void setjButton1(JButton jButton1) {
+        this.jButton1 = jButton1;
+    }
+
+    public JButton getjButton2() {
+        return jButton2;
+    }
+
+    public void setjButton2(JButton jButton2) {
+        this.jButton2 = jButton2;
+    }
+
+    public JButton getjButton3() {
+        return jButton3;
+    }
+
+    public void setjButton3(JButton jButton3) {
+        this.jButton3 = jButton3;
+    }
+
+    public JButton getjButton4() {
+        return jButton4;
+    }
+
+    public void setjButton4(JButton jButton4) {
+        this.jButton4 = jButton4;
+    }
+
+    public JButton getjButton5() {
+        return jButton5;
+    }
+
+    public void setjButton5(JButton jButton5) {
+        this.jButton5 = jButton5;
+    }
+
+    public JButton getjButton6() {
+        return jButton6;
+    }
+
+    public void setjButton6(JButton jButton6) {
+        this.jButton6 = jButton6;
+    }
+
+    public JButton getjButton7() {
+        return jButton7;
+    }
+
+    public void setjButton7(JButton jButton7) {
+        this.jButton7 = jButton7;
+    }
+
+    public Thread getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Thread timer) {
+        this.timer = timer;
+    }
+
+    public JLabel[] getLabels() {
+        return labels;
+    }
+
+    public void setLabels(JLabel[] labels) {
+        this.labels = labels;
+    }
+
+    public JLabel[] getUserNames() {
+        return userNames;
+    }
+
+    public void setUserNames(JLabel[] userNames) {
+        this.userNames = userNames;
+    }
+
+    public Icon getScissor() {
+        return scissor;
+    }
+
+    public void setScissor(Icon scissor) {
+        this.scissor = scissor;
+    }
+
+    public Icon getRock() {
+        return rock;
+    }
+
+    public void setRock(Icon rock) {
+        this.rock = rock;
+    }
+
+    public Icon getPaper() {
+        return paper;
+    }
+
+    public void setPaper(Icon paper) {
+        this.paper = paper;
+    }
+
+    public JTextArea getjTextArea1() {
+        return jTextArea1;
+    }
+
+    public void setjTextArea1(JTextArea jTextArea1) {
+        this.jTextArea1 = jTextArea1;
+    }
+
+    public JLabel getLAmount() {
+        return LAmount;
+    }
+
+    public void setLAmount(JLabel LAmount) {
+        this.LAmount = LAmount;
+    }
+
+    public JLabel getLChoose1() {
+        return LChoose1;
+    }
+
+    public void setLChoose1(JLabel LChoose1) {
+        this.LChoose1 = LChoose1;
+    }
+
+    public JLabel getLChoose2() {
+        return LChoose2;
+    }
+
+    public void setLChoose2(JLabel LChoose2) {
+        this.LChoose2 = LChoose2;
+    }
+
+    public JLabel getLChoose3() {
+        return LChoose3;
+    }
+
+    public void setLChoose3(JLabel LChoose3) {
+        this.LChoose3 = LChoose3;
+    }
+
+    public JLabel getLChoose4() {
+        return LChoose4;
+    }
+
+    public void setLChoose4(JLabel LChoose4) {
+        this.LChoose4 = LChoose4;
+    }
+
+    public JLabel getLTimer() {
+        return LTimer;
+    }
+
+    public void setLTimer(JLabel LTimer) {
+        this.LTimer = LTimer;
+    }
+
+    public JLabel getLUserName1() {
+        return LUserName1;
+    }
+
+    public void setLUserName1(JLabel LUserName1) {
+        this.LUserName1 = LUserName1;
+    }
+
+    public JLabel getLUserName2() {
+        return LUserName2;
+    }
+
+    public void setLUserName2(JLabel LUserName2) {
+        this.LUserName2 = LUserName2;
+    }
+
+    public JLabel getLUserName3() {
+        return LUserName3;
+    }
+
+    public void setLUserName3(JLabel LUserName3) {
+        this.LUserName3 = LUserName3;
+    }
+
+    public JLabel getLUserName4() {
+        return LUserName4;
+    }
+
+    public void setLUserName4(JLabel LUserName4) {
+        this.LUserName4 = LUserName4;
+    }
+
+    public JLabel getlUser1() {
+        return lUser1;
+    }
+
+    public void setlUser1(JLabel lUser1) {
+        this.lUser1 = lUser1;
+    }
+
+    public JLabel getlUser2() {
+        return lUser2;
+    }
+
+    public void setlUser2(JLabel lUser2) {
+        this.lUser2 = lUser2;
+    }
+
+    public JLabel getlUser3() {
+        return lUser3;
+    }
+
+    public void setlUser3(JLabel lUser3) {
+        this.lUser3 = lUser3;
+    }
+
+    public JLabel getlUser4() {
+        return lUser4;
+    }
+
+    public void setlUser4(JLabel lUser4) {
+        this.lUser4 = lUser4;
+    }
+    ClientBus client;
     JLabel[] labels = new JLabel[3];
     JLabel[] userNames = new JLabel[3];
     JLabel[] choose = new JLabel[3];
+
+    public void setVisiblez(boolean rs){
+        this.setVisible(rs);
+    }
+    
+    public JLabel[] getChoose() {
+        return choose;
+    }
+
+    public void setChoose(JLabel[] choose) {
+        this.choose = choose;
+    }
+
+    public JTextField gettClient() {
+        return tClient;
+    }
+
+    public void settClient(JTextField tClient) {
+        this.tClient = tClient;
+    }
     Icon scissor ,rock,paper;
-    boolean isPlaying = false;
+    
     public fLogin flogin;
     public fClient(int port,Player user, fLogin flogin) {
         initComponents();
         setupframe();
         this.flogin = flogin;
-        client = new Client(user,"localhost",port);
+        client = new ClientBus(user,"localhost",port,this);
         (new Thread(client)).start();
         
                 labels[0] = lUser2;
@@ -56,6 +297,8 @@ public class fClient extends javax.swing.JFrame {
                 LChoose2.setVisible(false);
                 LChoose3.setVisible(false);
                 LChoose4.setVisible(false);
+                
+                this.setVisible(true);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -330,14 +573,14 @@ public class fClient extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        /*
-        client.SendMessage(client.currentUser.name + " đã thoát khỏi phòng",true);
-          try {
-            client.socket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         */
+        
+//        client.SendMessage(client.currentUser.name + " đã thoát khỏi phòng",true);
+//          try {
+//            client.socket.close();
+//        } catch (IOException ex) {
+//            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        
     }//GEN-LAST:event_formWindowClosing
 
     private void scissor_choose(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scissor_choose
@@ -395,274 +638,8 @@ public class fClient extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowClosed
     
-    public class Client implements Runnable,IClient {
+   
     
-    private ObjectInputStream reader ;
-    private ObjectOutputStream writer;
-    private Socket socket;
-    private final String address;
-    private int port;
-    private ClientObject[] users ;
-    private ClientObject currentUser;
-    private Player user;
-    public Client(Player user,String address, int port){
-        this.address = address;
-        this.port = port;
-        this.user = user;
-       
-        
-    }
-    
-    @Override
-    public void SendMessage( String message,boolean isReady) {
-       
-        try {
-            currentUser.message = message;
-            currentUser.isReady = isReady;
-            
-            ClientObject client = currentUser;
-            writer.writeObject(client);
-            writer.reset();
-           
-        } catch (IOException ex) {
-            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
-    public void chargeCard() {
-       
-        try {
-            currentUser.choose=0;
-            ClientObject client = currentUser;
-            writer.writeObject(client);
-            writer.reset();
-            LAmount.setText(currentUser.amount+ " Coin");
-           
-        } catch (IOException ex) {
-            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
-    
-    @Override
-    public void ReceiveMessage(String message) {
-        jTextArea1.append( message + "\n");
-    }
-    
-    @Override
-    public boolean isAllReady(){
-        for(ClientObject user : users){
-            if(user != null)
-            if(!user.isReady) return false;
-        }
-        return true;
-    }
-    public boolean isEndgame(){
-        for(ClientObject user : users){
-            if(user != null)
-            if(user.choose>=4) return true;
-        }
-        return false;
-    }
-    
-
-    @Override
-    public void run() {
-            try {
-            socket = new Socket("localhost", port);
-                 InputStream is = socket.getInputStream();
-                 OutputStream out = socket.getOutputStream();
-            if(is.read() == 1){
-                
-                //new line of code start
-                
-//                socket.close();
-//                 socket = new Socket(address, ++port);
-//                 is = socket.getInputStream();
-                //new line of code end
-                
-                JOptionPane.showMessageDialog( null,"phòng đầy ");
-                System.exit(0);
-                return;
-                
-            }
-            // to read from server
-            reader = new ObjectInputStream(socket.getInputStream());
-            // to write to server
-            writer = new ObjectOutputStream(socket.getOutputStream());
-            
-            writer.writeObject(user);
-//            int loginRs = is.read();
-            Player loginRs = (Player) reader.readObject();
-            if(loginRs == null){
-                //fail to login
-                 JOptionPane.showMessageDialog( null,"Sai tài khoản hoặc mật khẩu");
-                 return;
-                 
-            }
-            else{
-                JOptionPane.showMessageDialog( null,"Đăng nhập thành công");
-                this.user = loginRs;
-                currentUser = new ClientObject(user.getId(), "", user.getPlayerName().toString().trim(), false);
-                currentUser.amount = user.getAmount();
-                LUserName1.setText(currentUser.name.trim());
-                LAmount.setText(currentUser.amount + " Coin");
-                fClient.this.setVisible(true);
-                fClient.this.flogin.setVisible(false);
-            }
-            
-            
-            
-            writer.writeObject(currentUser);
-            writer.reset();
-            currentUser.message = currentUser.name + " vừa vào phòng";
-            writer.writeObject(currentUser);
-            
-            String mess;
-            while(true){
-                System.out.println("client is watting");
-                Object object = reader.readObject();
-                
-                if(object instanceof ClientObject){  
-                    ClientObject user = (ClientObject)object;
-                    //receive message from other players
-                    if(!user.message.isEmpty() && user.id != currentUser.id){
-                    mess = user.name + " : " + user.message;
-                    ReceiveMessage(mess);
-                    }
-                }
-                else if(object instanceof ClientObject[]){
-                    users =(ClientObject[])object;
-                    long winAmount = 0;
-                    for(ClientObject user : users){
-                        if(user != null)
-                        if(user.id == currentUser.id){
-                            winAmount = user.amount - currentUser.amount;
-                            currentUser = user;
-                            break;
-                        }
-                    }
-                    //everyone isready
-                    
-                       LAmount.setText(currentUser.amount + " Coin");
-                        //receive new amount after play game
-                        //if win
-                        if(isPlaying){
-                            if(winAmount > 0){
-                                JOptionPane.showMessageDialog(null ,"Bạn thắng");
-                            }
-                            //if lose
-                            else if(winAmount < 0)
-                                JOptionPane.showMessageDialog(null ,"Bạn thua");
-                            else JOptionPane.showMessageDialog(null ,"Hòa");
-                            isPlaying=false;
-                        }
-                        
-                    int i = 0;
-                    int j = 0;
-                    for(JLabel label : labels){
-                        if(users[i] == null) {
-                            labels[j].setEnabled(false);
-                            userNames[j].setText("");
-                        }
-                        else if(users[i].id != currentUser.id){
-                            labels[j].setEnabled(users[i].isReady);
-                            userNames[j].setText(users[i].name);
-                            j++;
-                        }
-                        i++;
-                    }
-                    if(isAllReady() && !isPlaying){   
-                            isPlaying=true;
-                        LChoose2.setVisible(false);
-                        LChoose3.setVisible(false);
-                        LChoose4.setVisible(false);
-                        timer = new Thread(new CountdownTimer(this));
-                        timer.start();
-                    }
-                    if(isEndgame()){
-                        int a = 0;
-                        int b = 0;
-                        for(JLabel label : choose){
-                        if(users[a] == null) {
-                        }
-                        else if(users[a].id != currentUser.id){
-                            choose[b].setVisible(true);
-                            setEndgame(users[a].choose,choose[b]);
-                            b++;
-                        }
-                        a++;
-                    }
-                    }
-                    
-                        
-                }
-            }
-        } catch (IOException ex) {
-            System.out.println("Can't connect "+ ex.getMessage());
-//             JOptionPane.showMessageDialog( null,"phòng đầy ");
-            System.exit(0);
-        }
-        catch (ClassNotFoundException ex) {
-            Logger.getLogger(fClient.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-    }
-    private void setEndgame(byte choose, JLabel Lchoose){
-        switch(choose){
-            case 4:
-                Lchoose.setIcon(scissor);
-                break;
-            case 5:
-                Lchoose.setIcon(rock);
-                break;
-            case 6:
-                Lchoose.setIcon(paper);
-                break;
-            default:
-                break;
-        }
-        System.out.println(choose);
-    }
-  
-}
-    public class CountdownTimer implements Runnable{
-        Client client;
-        public CountdownTimer(Client client){
-            this.client = client;
-        }
-        @Override
-        public void run() {   
-            LChoose1.setIcon(scissor);
-            LChoose1.setVisible(true);
-            jButton5.setEnabled(true);
-            jButton6.setEnabled(true);
-            jButton4.setEnabled(true);
-            jButton2.setEnabled(false);
-            jButton7.setEnabled(false);
-            for(int i = 5 ; i >= 0; i--){
-                try {
-                     LTimer.setText(i+" giây");
-                    Thread.sleep(1000);
-                } 
-                catch (InterruptedException ex) {
-                    return;
-                }
-            }
-            jButton2.setEnabled(true);
-            //send choose to server
-            System.out.println("player choose " + client.currentUser.choose);
-            if(client.currentUser.choose != 1 && client.currentUser.choose != 2 && client.currentUser.choose != 3)
-                client.currentUser.choose = 1;
-            lUser1.setEnabled(false);
-            client.SendMessage("", true);
-            jButton1.setEnabled(true);
-            jButton5.setEnabled(false);
-            jButton6.setEnabled(false);
-            jButton4.setEnabled(false);
-            jButton7.setEnabled(true);
-            LTimer.setText("Đang chờ người chơi");
-        }
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LAmount;

@@ -22,11 +22,12 @@ import java.util.logging.Logger;
     ObjectInputStream reader; 
     ObjectOutputStream writer;
     public long id = 0;
-    
+    ServerHandler serverHandler;
 
-    public ClientHandler(Socket socket,ObjectOutputStream out,ObjectInputStream in){
+    public ClientHandler(Socket socket,ObjectOutputStream out,ObjectInputStream in ,ServerHandler serverHandler){
       this.writer = out;
       this.reader = in;
+      this.serverHandler = serverHandler;
     }
    
     @Override
@@ -37,38 +38,38 @@ import java.util.logging.Logger;
 
                     System.out.println("server is watting");
                     ClientObject client =(ClientObject)reader.readObject();
-                    if(!ServerHandler.Contain(client)){
+                    if(!serverHandler.Contain(client)){
                         System.out.println("online");
                         id = client.id;
-                        ServerHandler.players.add(client);
-                        System.out.println(client.id +"    "+ServerHandler.players.size());
+                        serverHandler.players.add(client);
+                        System.out.println(client.id +"    "+serverHandler.players.size());
                     }
                     if(client.message.isEmpty() ){
                         if(client.choose == 0){
-                            ServerHandler.chargeCard(client);
+                            serverHandler.chargeCard(client);
                         }
-                        if(ServerHandler.isEndgame()){
-                            ServerHandler.setDefaultChoice();
+                        if(serverHandler.isEndgame()){
+                            serverHandler.setDefaultChoice();
                         }
                         if(client.choose != -1){
-                            if(ServerHandler.isAllReady() && !ServerHandler.isMessAllSet()){
+                            if(serverHandler.isAllReady() && !serverHandler.isMessAllSet()){
                                 continue;
                             }
                             else{
-                                ServerHandler.checkWin();
+                                serverHandler.checkWin();
                             }
                             
                         }
                             //update new players
-                             for(ObjectOutputStream write : ServerHandler.GetOOS()){
-                                write.writeObject(ServerHandler.players.toArray(new ClientObject[4]));
+                             for(ObjectOutputStream write : serverHandler.GetOOS()){
+                                write.writeObject(serverHandler.players.toArray(new ClientObject[4]));
                                 write.reset();
                              }
                             continue;
                         }
                       
                     
-                    for(ObjectOutputStream write : ServerHandler.GetOOS()){
+                    for(ObjectOutputStream write : serverHandler.GetOOS()){
                         write.writeObject(client);
                         write.reset();
                     }
@@ -78,16 +79,16 @@ import java.util.logging.Logger;
                 }
         } catch (IOException ex) {
              System.out.println("Can't create thread for client " + ex.getMessage());
-             ServerHandler.RemovePlayer(id);
-             for(ObjectOutputStream write : ServerHandler.GetOOS()){
+             serverHandler.RemovePlayer(id);
+             for(ObjectOutputStream write : serverHandler.GetOOS()){
                  try {
-                     write.writeObject(ServerHandler.players.toArray(new ClientObject[4]));
+                     write.writeObject(serverHandler.players.toArray(new ClientObject[4]));
                      write.reset();
                  } catch (IOException ex1) {
                      System.out.println("client disconnected " + ex.getMessage());
                  }
              }
-              ServerHandler.Remove(writer);
+              serverHandler.Remove(writer);
            
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(fServer.class.getName()).log(Level.SEVERE, null, ex);

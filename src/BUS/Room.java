@@ -29,13 +29,15 @@ import java.util.logging.Logger;
     private boolean isRunning = false;
     private ServerSocket server;
     private ThreadPoolExecutor execute;       
+    private ServerHandler serverHandler ;
     public Room(int port){
         this.port = port;
+        serverHandler = new ServerHandler();
     }
     private void StartServer(){
         try {
             isRunning = true;
-            server = new ServerSocket(port, 0, InetAddress.getByName("127.0.0.2"));
+            server = new ServerSocket(port);
             execute = new ThreadPoolExecutor(4,4,0L,
                     TimeUnit.MILLISECONDS,
                     new LinkedBlockingQueue<Runnable>());       
@@ -59,8 +61,8 @@ import java.util.logging.Logger;
                         if(rs == null)
                             continue;
                     }
-                    ServerHandler.Add(out);
-                    ClientHandler handler = new ClientHandler(sock,out,in);
+                    serverHandler.Add(out);
+                    ClientHandler handler = new ClientHandler(sock,out,in,serverHandler);
                     execute.execute(handler);
                 }
                 

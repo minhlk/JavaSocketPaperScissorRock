@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,11 +24,19 @@ import javax.persistence.Table;
 public class Player  implements java.io.Serializable {
 
 
+    @Id
+    @Column(name="Id", unique=true, nullable=false)
+    @GeneratedValue
      private long id;
+    @Column(name="playerName", nullable=false)
      private String playerName;
+@Column(name="password", nullable=false)
      private String password;
+@Column(name="email", nullable=false)
      private String email;
+@Column(name="amount", nullable=false)
      private long amount;
+@OneToMany(fetch=FetchType.LAZY, mappedBy="player")
      private Set<Deposit> deposits = new HashSet<Deposit>(0);
 
     public Player() {
@@ -36,6 +45,7 @@ public class Player  implements java.io.Serializable {
 	
      public Player(String playerName, String password, String email, long amount) {
       
+//         this.id = -1;
         this.playerName = playerName;
         this.password = password;
         this.email = email;
@@ -57,10 +67,6 @@ public class Player  implements java.io.Serializable {
        this.deposits = deposits;
     }
    
-     @Id 
-
-    
-    @Column(name="Id", unique=true, nullable=false)
     public long getId() {
         return this.id;
     }
@@ -70,7 +76,6 @@ public class Player  implements java.io.Serializable {
     }
 
     
-    @Column(name="playerName", nullable=false)
     public String getPlayerName() {
         return this.playerName;
     }
@@ -80,7 +85,6 @@ public class Player  implements java.io.Serializable {
     }
 
     
-    @Column(name="password", nullable=false)
     public String getPassword() {
         return this.password;
     }
@@ -90,7 +94,6 @@ public class Player  implements java.io.Serializable {
     }
 
     
-    @Column(name="email", nullable=false)
     public String getEmail() {
         return this.email;
     }
@@ -100,7 +103,6 @@ public class Player  implements java.io.Serializable {
     }
 
     
-    @Column(name="amount", nullable=false)
     public long getAmount() {
         return this.amount;
     }
@@ -109,7 +111,6 @@ public class Player  implements java.io.Serializable {
         this.amount = amount;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="player")
     public Set<Deposit> getDeposits() {
         return this.deposits;
     }
