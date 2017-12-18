@@ -191,9 +191,9 @@ import javax.swing.JOptionPane;
                             fclient.isReady = false;
                         }
                         
-                    int i = 0;
+//                    int i = 0;
                     int j = 0;
-                    for(JLabel label : fclient.getLabels()){
+                    for(int i = 0 ; i < 4 ;  i++){
                         if(users[i] == null) {
                             
                            
@@ -206,7 +206,7 @@ import javax.swing.JOptionPane;
                             fclient.getUserNames()[j].setText(users[i].name);
                             j++;
                         }
-                        i++;
+                       
                     }
                     if(isAllReady() && !isPlaying){   
                             isPlaying=true;
